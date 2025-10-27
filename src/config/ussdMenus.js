@@ -7,101 +7,244 @@ import { t } from "./i18n.js";
  */
 export const getUssdMenus = (locale = "en") => {
   return {
+    // ===============================
+    // EXISTING MENUS (keep yours here)
+    // ===============================
+
+    // 🆕 MOTHERLINK MAIN FLOW
     welcome: {
       text: `CON ${t("welcome.title", {}, locale)}
     ${t("welcome.select_language", {}, locale)}
     1. ${t("welcome.english", {}, locale)}
     2. ${t("welcome.kinyarwanda", {}, locale)}
-    // 3. ${t("welcome.french", {}, locale)}
-    // 4. ${t("welcome.swahili", {}, locale)}
     `,
       options: {
-        1: "en",
-        2: "rw",
-        // 3: "fr",
-        // 4: "sw",
+        1: "main",
+        2: "main",
       },
     },
 
     main: {
       text: `CON ${t("main.title", {}, locale)}
-    1. ${t("main.emergencies", {}, locale)}
-    2. ${t("main.community_posts", {}, locale)}
-    3. ${t("main.hotlines", {}, locale)}
+    1. ${t("main.registration", {}, locale)}
+    2. ${t("main.update_info", {}, locale)}
+    3. ${t("main.ask_question", {}, locale)}
     4. ${t("main.distress", {}, locale)}
     5. ${t("main.ai_assistance", {}, locale)}
     6. ${t("main.settings", {}, locale)}
+    0. ${t("common.go_back", {}, locale)}
     `,
       options: {
-        1: "emergencies",
-        2: "communityPosts",
-        3: "hotlines",
+        1: "registration",
+        2: "updateInfo",
+        3: "askQuestion",
         4: "distress",
         5: "aiAssistance",
         6: "settings",
+        0: "welcome",
       },
     },
 
-    emergencies: {
-      text: `CON ${t("emergencies.title", {}, locale)}
-    1. ${t("emergencies.view_emergencies", {}, locale)}
-    2. ${t("emergencies.report_emergency", {}, locale)}
-    3. ${t("emergencies.my_emergencies", {}, locale)}
-    0. ${t("emergencies.go_back", {}, locale)}
+    // 🟢 Registration Flow
+    registration: {
+      text: `CON ${t("registration.title", {}, locale)}
+    1. ${t("registration.pregnant", {}, locale)}
+    2. ${t("registration.mother", {}, locale)}
+    0. ${t("common.go_back", {}, locale)}
     `,
       options: {
-        1: "viewEmergencies",
-        2: "reportEmergency",
-        3: "myEmergencies",
+        1: "regStepName",
+        2: "regStepName",
         0: "main",
       },
     },
 
-    communityPosts: {
-      text: `CON ${t("community_posts.title", {}, locale)}
-    1. ${t("community_posts.news", {}, locale)}
-    2. ${t("community_posts.events", {}, locale)}
-    0. ${t("community_posts.go_back", {}, locale)}
+    regStepName: {
+      text: `CON ${t("registration.step_name", {}, locale)}`,
+      options: {
+        "*": "regStepId",
+      },
+      acceptsInput: true,
+    },
+
+    regStepId: {
+      text: `CON ${t("registration.step_id", {}, locale)}`,
+      options: {
+        "*": "regStepInsurance",
+      },
+      acceptsInput: true,
+    },
+
+    regStepInsurance: {
+      text: `CON ${t("registration.step_insurance", {}, locale)}
+    1. ${t("common.confirm", {}, locale)}
+    2. ${t("common.cancel", {}, locale)}
     `,
       options: {
-        1: "news",
-        2: "events",
-        0: "main",
+        1: "regStepLocation",
+        2: "regStepLocation",
       },
     },
 
-    hotlines: {
-      text: `CON ${t("hotlines.title", {}, locale)}
-    1. ${t("hotlines.police", {}, locale)}
-    2. ${t("hotlines.fire", {}, locale)}
-    3. ${t("hotlines.ambulance", {}, locale)}
-    0. ${t("hotlines.go_back", {}, locale)}
+    regStepLocation: {
+      text: `CON ${t("registration.step_location", {}, locale)}`,
+      options: {
+        "*": "regStepPregnancyMonths",
+      },
+      acceptsInput: true,
+    },
+
+    regStepPregnancyMonths: {
+      text: `CON ${t("registration.step_pregnancy_months", {}, locale)}`,
+      options: {
+        "*": "regStepHealthCenter",
+      },
+      acceptsInput: true,
+    },
+
+    regStepHealthCenter: {
+      text: `CON ${t("registration.step_health_center", {}, locale)}`,
+      options: {
+        "*": "regStepConsent",
+      },
+      acceptsInput: true,
+    },
+
+    regStepConsent: {
+      text: `CON ${t("registration.confirm_consent", {}, locale)}
+    1. ${t("common.confirm", {}, locale)}
+    2. ${t("common.cancel", {}, locale)}
     `,
       options: {
-        1: "main",
+        1: "registrationComplete",
         2: "main",
-        3: "main",
-        0: "main",
       },
     },
 
+    registrationComplete: {
+      text: `END ${t("registration.registration_complete", { id: "12345" }, locale)}`,
+      options: {},
+    },
+
+    // 🟡 Update Info
+    updateInfo: {
+      text: `CON ${t("update_info.menu", {}, locale)}`,
+      options: {
+        1: "updateLocation",
+        2: "updateInsurance",
+        3: "updateId",
+        4: "updateHealthCenter",
+        5: "updatePregnancyMonths",
+        6: "main",
+      },
+    },
+
+    updateLocation: {
+      text: `CON ${t("update_info.update_location", {}, locale)}`,
+      options: {
+        "*": "updateSuccess",
+      },
+      acceptsInput: true,
+    },
+
+    updateInsurance: {
+      text: `CON ${t("update_info.update_insurance", {}, locale)}
+    1. ${t("common.confirm", {}, locale)}
+    2. ${t("common.cancel", {}, locale)}
+    `,
+      options: {
+        1: "updateSuccess",
+        2: "main",
+      },
+    },
+
+    updateId: {
+      text: `CON ${t("update_info.update_id", {}, locale)}`,
+      options: {
+        "*": "updateSuccess",
+      },
+      acceptsInput: true,
+    },
+
+    updateHealthCenter: {
+      text: `CON ${t("update_info.update_health_center", {}, locale)}`,
+      options: {
+        "*": "updateSuccess",
+      },
+      acceptsInput: true,
+    },
+
+    updatePregnancyMonths: {
+      text: `CON ${t("update_info.update_pregnancy_months", {}, locale)}`,
+      options: {
+        "*": "updateSuccess",
+      },
+      acceptsInput: true,
+    },
+
+    updateSuccess: {
+      text: `END ${t("update_info.update_success", {}, locale)}`,
+      options: {},
+    },
+
+    // 🔵 Ask Question
+    askQuestion: {
+      text: `CON ${t("ai_assistance.custom_prompt", {}, locale)}`,
+      options: {
+        "*": "aiResponse",
+      },
+      acceptsInput: true,
+    },
+
+    aiResponse: {
+      text: `END ${t("ai_assistance.guidance_title", {}, locale)}: ${t("ai_assistance.getting_guidance", {}, locale)}`,
+      options: {},
+    },
+
+    // 🔴 Distress Alert
     distress: {
       text: `CON ${t("distress.message", {}, locale)}
     1. ${t("distress.confirm", {}, locale)}
     0. ${t("distress.cancel", {}, locale)}
     `,
       options: {
-        1: "confirmDistress",
+        1: "distressConfirmed",
         0: "main",
       },
     },
 
+    distressConfirmed: {
+      text: `END ${t("responses.distress_activated", { reference: "ML123" }, locale)}`,
+      options: {},
+    },
+
+    // 🟣 AI Health Tips
+    aiAssistance: {
+      text: `CON ${t("ai_assistance.select_category", {}, locale)}
+    1. ${t("ai_assistance.diet", {}, locale)}
+    2. ${t("ai_assistance.mental", {}, locale)}
+    3. ${t("ai_assistance.child", {}, locale)}
+    4. ${t("ai_assistance.consultations", {}, locale)}
+    5. ${t("ai_assistance.custom", {}, locale)}
+    0. ${t("ai_assistance.go_back", {}, locale)}
+    `,
+      options: {
+        1: "aiResponse",
+        2: "aiResponse",
+        3: "aiResponse",
+        4: "aiResponse",
+        5: "askQuestion",
+        0: "main",
+      },
+    },
+
+    // ⚙️ Settings
     settings: {
       text: `CON ${t("settings.title", {}, locale)}
     1. ${t("settings.change_language", {}, locale)}
     2. ${t("settings.terms_of_service", {}, locale)}
     3. ${t("settings.privacy_policy", {}, locale)}
-    0. ${t("settings.go_back", {}, locale)}
+    0. ${t("common.go_back", {}, locale)}
     `,
       options: {
         1: "languages",
@@ -111,112 +254,17 @@ export const getUssdMenus = (locale = "en") => {
       },
     },
 
-    //  sub screens
-    reportEmergency: {
-      text: `CON ${t("report_emergency.title", {}, locale)}
-    1. ${t("report_emergency.fire", {}, locale)}
-    2. ${t("report_emergency.medical", {}, locale)}
-    3. ${t("report_emergency.accident", {}, locale)}
-    4. ${t("report_emergency.crime", {}, locale)}
-    5. ${t("report_emergency.other", {}, locale)}
-    0. ${t("report_emergency.go_back", {}, locale)}
-    `,
-      options: {
-        1: "additionalInfo",
-        2: "additionalInfo",
-        3: "additionalInfo",
-        4: "additionalInfo",
-        5: "additionalInfo",
-        0: "emergencies",
-      },
-    },
-
-    additionalInfo: {
-      text: `CON ${t("report_emergency.additional_info_prompt", {}, locale)}
-    1. ${t("common.continue", {}, locale)}
-    0. ${t("common.go_back", {}, locale)}
-    `,
-      options: {
-        1: "confirmEmergency",
-        0: "reportEmergency",
-      },
-      acceptsInput: true, // Flag to indicate this menu accepts free text
-    },
-
-    confirmEmergency: {
-      text: `CON Are you sure you want to report this emergency?
-    1. ${t("common.confirm", {}, locale)}
-    0. ${t("common.cancel", {}, locale)}
-    `,
-      options: {
-        1: "submitEmergency",
-        0: "emergencies",
-      },
-    },
-
     languages: {
       text: `CON ${t("languages.title", {}, locale)}
     1. ${t("languages.english", {}, locale)}
     2. ${t("languages.kinyarwanda", {}, locale)}
-    3. ${t("languages.french", {}, locale)}
-    4. ${t("languages.swahili", {}, locale)}
-    0. ${t("languages.go_back", {}, locale)}
+    0. ${t("common.go_back", {}, locale)}
     `,
       options: {
         1: "en",
         2: "rw",
-        3: "fr",
-        4: "sw",
-        0: "main",
+        0: "settings",
       },
-    },
-
-    terms: {
-      text: `CON ${t("settings.terms_of_service", {}, locale)}
-    0. ${t("common.go_back", {}, locale)}
-    `,
-      options: {
-        0: "main",
-      },
-    },
-
-    privacy: {
-      text: `CON ${t("settings.privacy_policy", {}, locale)}
-    0. ${t("common.go_back", {}, locale)}
-    `,
-      options: {
-        0: "main",
-      },
-    },
-
-    aiAssistance: {
-      text: `CON ${t("ai_assistance.title", {}, locale)}
-    ${t("ai_assistance.select_emergency", {}, locale)}
-    1. ${t("ai_assistance.fire", {}, locale)}
-    2. ${t("ai_assistance.medical", {}, locale)}
-    3. ${t("ai_assistance.accident", {}, locale)}
-    4. ${t("ai_assistance.crime", {}, locale)}
-    5. ${t("ai_assistance.custom", {}, locale)}
-    0. ${t("ai_assistance.go_back", {}, locale)}
-    `,
-      options: {
-        1: "getAIGuidance",
-        2: "getAIGuidance",
-        3: "getAIGuidance",
-        4: "getAIGuidance",
-        5: "customAIRequest",
-        0: "main",
-      },
-    },
-
-    customAIRequest: {
-      text: `CON ${t("ai_assistance.custom_prompt", {}, locale)}
-    1. ${t("common.go_back", {}, locale)}
-    `,
-      options: {
-        1: "aiAssistance",
-      },
-      acceptsInput: true,
     },
   };
 };
