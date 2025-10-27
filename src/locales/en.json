@@ -1,57 +1,77 @@
 {
   "welcome": {
-    "title": "Welcome to INKINGI Rescue",
-    "subtitle": "Emergency Response System",
+    "title": "Welcome to MotherLink",
+    "subtitle": "Parent Assistance System",
     "select_language": "Select Language",
-    "english": "English",
     "kinyarwanda": "Kinyarwanda",
-    "french": "French",
-    "swahili": "Swahili"
+    "english": "English"
   },
   "main": {
-    "title": "Main Menu",
-    "emergencies": "Emergencies",
-    "community_posts": "Community Posts",
-    "hotlines": "Hotlines",
+    "title": "Menu",
+    "registration": "Registration",
+    "update_info": "Update Info",
+    "ask_question": "Ask a Question",
     "distress": "Distress",
-    "ai_assistance": "AI Assistance",
+    "ai_assistance": "Health Advice",
     "settings": "Settings",
-    "go_back": "Go back"
+    "go_back": "Go Back"
+  },
+  "registration": {
+    "title": "Registration",
+    "pregnant": "Register as a Pregnant Mother",
+    "mother": "Register as a Mother",
+    "step_name": "Enter your name",
+    "step_id": "Enter your ID number",
+    "step_insurance": "Do you have insurance? 1.Yes 2.No",
+    "step_location": "Enter District, Sector, Cell",
+    "step_pregnancy_months": "Enter months pregnant",
+    "step_health_center": "Enter your health center or press 1 to auto-link nearby",
+    "confirm_consent": "Do you consent to your data being used for healthcare purposes? 1.Yes 2.No",
+    "registration_complete": "Thank you! You are registered. Your MotherLink ID is: {{id}}"
+  },
+  "update_info": {
+    "title": "Update Info",
+    "menu": "Select what you want to update:\n1. Location\n2. Insurance\n3. ID Number\n4. Health Center\n5. Months Pregnant (Pregnant only)\n6. Exit",
+    "update_location": "Enter new District, Sector, Cell",
+    "update_insurance": "Do you have insurance? 1.Yes 2.No",
+    "update_id": "Enter new ID number",
+    "update_health_center": "Enter health center or press 1 to auto-link nearby",
+    "update_pregnancy_months": "Enter months pregnant",
+    "update_success": "Your information has been updated successfully!",
+    "go_back": "Go Back"
   },
   "emergencies": {
     "title": "Emergencies",
     "view_emergencies": "View Emergencies",
     "report_emergency": "Report Emergency",
     "my_emergencies": "My Emergencies",
-    "go_back": "Go back"
+    "go_back": "Go Back"
   },
   "report_emergency": {
     "title": "Report Emergency",
-    "fire": "Fire",
-    "medical": "Medical",
-    "accident": "Accident",
-    "crime": "Crime",
+    "pregnant": "Pregnant Mother",
+    "mother": "Mother",
+    "child": "Child",
     "other": "Other",
-    "go_back": "Go back",
-    "additional_info_prompt": "Please tell us more about the emergency (optional)\n\nType your message or press 1 to skip"
+    "go_back": "Go Back",
+    "additional_info_prompt": "Provide more details about the emergency (optional)\n\nType your message or press 1 to skip"
   },
-  "community_posts": {
-    "title": "Community Posts",
-    "news": "News",
-    "events": "Events",
-    "announcements": "Announcements",
-    "go_back": "Go back"
-  },
-  "hotlines": {
-    "title": "Emergency Hotlines",
-    "police": "Police: 112",
-    "ambulance": "Ambulance: 912",
-    "fire": "Fire Brigade: 111",
-    "go_back": "Go back"
+  "ai_assistance": {
+    "title": "Health Advice",
+    "select_category": "Select a category to get AI assistance",
+    "diet": "Diet & Nutrition",
+    "mental": "Mental Health",
+    "child": "Pregnancy & Child Care",
+    "consultations": "Consultation & Medical Care",
+    "custom": "Ask Your Question",
+    "go_back": "Go Back",
+    "custom_prompt": "Type your question about an issue or press 1 to go back",
+    "getting_guidance": "Getting AI assistance...",
+    "guidance_title": "AI Assistance"
   },
   "distress": {
-    "title": "Distress Alert",
-    "message": "Are you in an immediate emergency? If yes, kindly confirm and help will be on the way.",
+    "title": "Urgent Help",
+    "message": "Are you in urgent danger? Confirm to send immediate help.",
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
@@ -60,66 +80,33 @@
     "change_language": "Change Language",
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
-    "go_back": "Go back"
+    "go_back": "Go Back"
   },
   "languages": {
     "title": "Select Language",
     "english": "English",
     "kinyarwanda": "Kinyarwanda",
-    "french": "French",
-    "swahili": "Swahili",
-    "go_back": "Go back"
+    "go_back": "Go Back"
+  },
+  "hotlines": {
+    "title": "Emergency Hotlines",
+    "police": "Police: 112",
+    "ambulance": "Ambulance: 912",
+    "fire": "Fire Brigade: 111",
+    "go_back": "Go Back"
   },
   "responses": {
-    "emergency_reported": "Thank you! Your {{type}} emergency has been reported.\n\nReference: {{reference}}\n\nA confirmation SMS has been sent. The rescue team will be on the way shortly. Stay safe!",
-    "emergency_reported_fallback": "Your emergency has been reported.\n\nReference: {{reference}}\n\nHelp is on the way!",
-    "distress_activated": "DISTRESS ALERT ACTIVATED!\n\nReference: {{reference}}\n\nEmergency services have been notified. Help is on the way. Stay calm and safe.",
+    "emergency_reported": "Thank you! Emergency {{type}} reported.\n\nReference Number: {{reference}}\n\nMessage sent via phone. Help is on the way. Stay safe!",
+    "emergency_reported_fallback": "Emergency reported.\n\nReference Number: {{reference}}\n\nHelp is coming!",
+    "distress_activated": "URGENT HELP ACTIVATED!\n\nReference Number: {{reference}}\n\nRescuers notified. Assistance is coming. Stay strong and careful.",
     "invalid_option": "Invalid option selected",
     "no_emergencies": "No emergencies found",
     "no_user_emergencies": "You have no emergencies",
-    "no_posts": "No posts available",
     "emergency_not_found": "Emergency not found",
-    "post_not_found": "Post not found",
     "unable_to_load": "Unable to load {{item}}"
   },
-  "emergency_details": {
-    "title": "Emergency Details",
-    "type": "Type",
-    "status": "Status",
-    "priority": "Priority",
-    "location": "Location",
-    "reported_by": "Reported by",
-    "phone": "Phone",
-    "time": "Time",
-    "go_back": "Go back"
-  },
-  "post_details": {
-    "title": "Post Details",
-    "by": "By",
-    "posted": "Posted",
-    "go_back": "Go back"
-  },
-  "emergency_list": {
-    "all_emergencies": "All Emergencies ({{count}})",
-    "your_emergencies": "Your Emergencies ({{count}})",
-    "by": "By",
-    "go_back": "Go back"
-  },
-  "ai_assistance": {
-    "title": "AI Emergency Assistance",
-    "select_emergency": "Select emergency type for AI guidance",
-    "fire": "Fire Emergency",
-    "medical": "Medical Emergency",
-    "accident": "Accident",
-    "crime": "Crime/Safety",
-    "custom": "Ask Custom Question",
-    "go_back": "Go back",
-    "custom_prompt": "Type your emergency question or press 1 to go back",
-    "getting_guidance": "Getting AI guidance...",
-    "guidance_title": "AI Emergency Guidance"
-  },
   "common": {
-    "go_back": "Go back",
+    "go_back": "Go Back",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "continue": "Continue"
