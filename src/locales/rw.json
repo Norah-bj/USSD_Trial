@@ -1,0 +1,114 @@
+{
+  "welcome": {
+    "title": "Murakaza neza kuri MotherLink",
+    "subtitle": "Sisitemu yo Gufasha Ababyeyi",
+    "select_language": "Hitamo Ururimi",
+    "kinyarwanda": "Ikinyarwanda",
+    "english": "Icyongereza"
+  },
+  "main": {
+    "title": "Ibikubiyemo",
+    "registration": "Kwiyandikisha",
+    "update_info": "Kuvugurura amakuru",
+    "ask_question": "Kubaza ikibazo",
+    "distress": "Ubutabazi",
+    "ai_assistance": "Inama z'ubuzima",
+    "settings": "Igenamiterere",
+    "go_back": "Subira inyuma"
+  },
+  "registration": {
+    "title": "Kwiyandikisha",
+    "pregnant": "Kwiyandikisha nk’Umugore Utwite",
+    "mother": "Kwiyandikisha nk’Umubyeyi",
+    "step_name": "Andika izina ryawe",
+    "step_id": "Andika nimero yawe y'indangamuntu",
+    "step_insurance": "Ufite ubwishingizi? 1.Yego 2.Oya",
+    "step_location": "Andika Akarere, Umurenge, Akagari",
+    "step_pregnancy_months": "Andika amezi utwite",
+    "step_health_center": "Injiza izina ry’ivuriro ujya kwivurizaho cyangwa 1 kugirango duhuze n'ivuriro hafi",
+    "confirm_consent": "Wemeye ko amakuru yawe akoreshwa mu buvuzi? 1.Yego 2.Oya",
+    "registration_complete": "Murakoze! Wiyandikishije. MotherLink ID yawe ni: {{id}}"
+  },
+  "update_info": {
+    "title": "Kuvugurura Amakuru",
+    "menu": "Hitamo icyo ushaka kuvugurura:\n1. Aho utuye\n2. Ubwishingizi\n3. Nimero y’indangamuntu\n4. Ivuriro ujya kwivurizaho\n5. Amezi utwite (Abagore batwite gusa)\n6. Gusohoka",
+    "update_location": "Andika Akarere, Umurenge, Akagari bishya",
+    "update_insurance": "Ufite ubwishingizi? 1.Yego 2.Oya",
+    "update_id": "Andika nimero nshya y’indangamuntu",
+    "update_health_center": "Andika izina ry’ivuriro cyangwa 1 kugirango duhuze n'ivuriro hafi",
+    "update_pregnancy_months": "Andika amezi utwite",
+    "update_success": "Amakuru yawe yashyizweho neza!",
+    "go_back": "Subira inyuma"
+  },
+  "emergencies": {
+    "title": "Ibyihutirwa",
+    "view_emergencies": "Reba Ibyihutirwa",
+    "report_emergency": "Tanga Ikibabaje",
+    "my_emergencies": "Ibyihutirwa Byanjye",
+    "go_back": "Subira inyuma"
+  },
+  "report_emergency": {
+    "title": "Tanga Ikibabaje/Ibyihutirwa",
+    "pregnant": "Umubyeyi utwite",
+    "mother": "Umubyeyi wabyaye",
+    "child": "Umwana",
+    "other": "Ikindi",
+    "go_back": "Subira inyuma",
+    "additional_info_prompt": "Tubwire byinshi ku kibabaje (bitari ngombwa)\n\nAndika ubutumwa bwawe cyangwa ukande 1 kugirango urenze"
+  },
+  "ai_assistance": {
+    "title": "Inama z'Ubuzima",
+    "select_category": "Hitamo icyiciro cy'inama kugira ngo ubone ubufasha bwa AI",
+    "diet": "Imirire n’Ibiribwa",
+    "mental": "Ubuzima bwo mu Mutwe",
+    "child": "Kwitwararika ku Mwana n’Inda",
+    "consultations": "Kuvura & Kwivuza",
+    "custom": "Baza Ikibazo Cyawe",
+    "go_back": "Subira inyuma",
+    "custom_prompt": "Andika ikibazo cyawe cy'ikibabaje cyangwa ukande 1 kugira ngo usubire inyuma",
+    "getting_guidance": "Turimo kubona ubufasha bwa AI...",
+    "guidance_title": "Ubufasha bwa AI"
+  },
+  "distress": {
+    "title": "Akaga Gakomeye",
+    "message": "Uri mu kaga gakomeye? Niba ari byo, emeza kandi ubufasha buzaza ako kanya.",
+    "confirm": "Emeza",
+    "cancel": "Hagarika"
+  },
+  "settings": {
+    "title": "Igenamiterere",
+    "change_language": "Hindura Ururimi",
+    "terms_of_service": "Amabwiriza yo Gukoresha",
+    "privacy_policy": "Amabwiriza y'Ibanga",
+    "go_back": "Subira inyuma"
+  },
+  "languages": {
+    "title": "Hitamo Ururimi",
+    "english": "Icyongereza",
+    "kinyarwanda": "Ikinyarwanda",
+    "go_back": "Subira inyuma"
+  },
+  "hotlines": {
+    "title": "Telefoni z'Ubufasha",
+    "police": "Polisi: 112",
+    "ambulance": "Ambulance: 912",
+    "fire": "Abazimya Umuriro: 111",
+    "go_back": "Subira inyuma"
+  },
+  "responses": {
+    "emergency_reported": "Murakoze! Ikibabaje {{type}} cyatanzwe.\n\nNomero: {{reference}}\n\nUbutumwa bwoherejwe kuri telefoni. Abakiza bazaza vuba. Witonde!",
+    "emergency_reported_fallback": "Ikibabaje cyatanzwe.\n\nNomero: {{reference}}\n\nUbufasha buza!",
+    "distress_activated": "AKAGA GAKOMEYE KEMEWE!\n\nNomero: {{reference}}\n\nAbakiza bamenyeshejwe. Ubufasha buza. Komera kandi witondere.",
+    "invalid_option": "Uhisemo utemewe",
+    "no_emergencies": "Nta byihutirwa byabonetse",
+    "no_user_emergencies": "Ntabwo ufite ibyihutirwa",
+    "emergency_not_found": "Ikibabaje ntikibonetse",
+    "unable_to_load": "Ntibishoboye gupakurura {{item}}"
+  },
+  "common": {
+    "go_back": "Subira inyuma",
+    "cancel": "Hagarika",
+    "confirm": "Emeza",
+    "continue": "Komeza"
+  }
+}
