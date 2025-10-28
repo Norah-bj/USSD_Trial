@@ -9,7 +9,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load AI system instructions
+// Load AI system instructions (you can customize this file)
 const systemInstructions = readFileSync(
   join(__dirname, "../config/ai-instructions.txt"),
   "utf-8"
@@ -21,16 +21,16 @@ const ai = new GoogleGenAI({
 });
 
 /**
- * Get AI assistance for emergency situations
- * @param {string} emergencyType - Type of emergency (fire, medical, accident, etc.)
- * @param {string} customRequest - Optional custom request from user
- * @param {string} locale - User's language preference
- * @returns {Promise<Object>} AI response with guidance
+ * Get AI assistance for MotherLink
+ * @param {string} topic - Type of request (pregnancy, counselling, distress, etc.)
+ * @param {string} customRequest - Optional custom message from user
+ * @param {string} locale - Language preference (default: rw)
+ * @returns {Promise<Object>} AI response
  */
-export const getEmergencyGuidance = async (
-  emergencyType,
+export const getMotherlinkGuidance = async (
+  topic,
   customRequest = null,
-  locale = "en"
+  locale = "rw"
 ) => {
   try {
     const config = {
@@ -43,41 +43,32 @@ export const getEmergencyGuidance = async (
 
     const model = "gemini-flash-lite-latest";
 
-    // Build the user prompt based on emergency type and language
-    let userPrompt = "";
-
-    if (customRequest) {
-      // User has a specific question
-      userPrompt = buildCustomPrompt(customRequest, locale);
-    } else {
-      // Standard emergency guidance
-      userPrompt = buildEmergencyPrompt(emergencyType, locale);
-    }
+    // Build user prompt
+    const userPrompt = customRequest
+      ? buildCustomPrompt(customRequest, locale)
+      : buildTopicPrompt(topic, locale);
 
     const contents = [
       {
         role: "user",
-        parts: [
-          {
-            text: userPrompt,
-          },
-        ],
+        parts: [{ text: userPrompt }],
       },
     ];
 
+    // Generate AI response
     const response = await ai.models.generateContentStream({
       model,
       config,
       contents,
     });
 
-    // Collect the streamed response
+    // Combine streamed text
     let fullText = "";
     for await (const chunk of response) {
       fullText += chunk.text;
     }
 
-    // Format for USSD (max 600 characters)
+    // Format for USSD (short, clean)
     const formattedText = formatForUSSD(fullText);
 
     return {
@@ -85,64 +76,59 @@ export const getEmergencyGuidance = async (
       guidance: formattedText,
     };
   } catch (error) {
-    console.error("Error getting AI guidance:", error);
+    console.error("AI Error:", error);
     return {
       success: false,
       error: error.message,
-      guidance: getDefaultGuidance(emergencyType, locale),
+      guidance: getDefaultGuidance(topic, locale),
     };
   }
 };
 
 /**
- * Build prompt for standard emergency guidance
+ * Build prompt for common MotherLink topics
  */
-const buildEmergencyPrompt = (emergencyType, locale) => {
-  const languageInstruction = getLanguageInstruction(locale);
+const buildTopicPrompt = (topic, locale) => {
+  const langInstruction = getLanguageInstruction(locale);
 
   const prompts = {
-    fire: `${languageInstruction} A person is experiencing a FIRE emergency right now. Provide immediate, life-saving guidance (max 300 characters). Follow the FIRE EMERGENCIES section in your instructions.`,
-    medical: `${languageInstruction} A person is experiencing a MEDICAL emergency right now. Provide immediate, life-saving first aid guidance (max 300 characters). Follow the MEDICAL EMERGENCIES section in your instructions.`,
-    accident: `${languageInstruction} A person is at an ACCIDENT scene right now. Provide immediate guidance (max 300 characters). Follow the ACCIDENTS section in your instructions.`,
-    crime: `${languageInstruction} A person is experiencing a CRIME/SAFETY emergency right now. Provide immediate safety guidance (max 300 characters). Follow the CRIME/SAFETY section in your instructions.`,
-    other: `${languageInstruction} A person is experiencing an emergency right now. Provide general emergency guidance (max 300 characters). Follow your core responsibilities.`,
+    pregnancy: `${langInstruction} Umuntu utwite arakeneye inama zihuse ku bijyanye n'ubuzima bwe n'ubw'umwana. Tangira inama ngufi kandi z'umwihariko ku bijyanye n'ubuzima bw'ababyeyi batwite.`,
+    postpartum: `${langInstruction} Umubyeyi amaze kubyara arashaka inama ku buryo yakwita ku mwana n'ubuzima bwe. Tanga inama z'ingenzi kandi ngufi.`,
+    counselling: `${langInstruction} Umuntu arumva afite ikibazo cy'agahinda cyangwa ihungabana. Tangira amagambo yihuse yo kumuhumuriza n'aho yahera kugira ngo abone ubufasha.`,
+    distress: `${langInstruction} Umuntu ari mu bibazo bikomeye byihutirwa (nk'iterabwoba, ihohoterwa, cyangwa ikibazo cy'ubuzima). Tanga inama y'ibanze mu buryo bugufi kandi bworoheje.`,
+    health: `${langInstruction} Umuntu arashaka kumenya uburyo bwo kubaho neza no kurinda ubuzima bwe. Tanga inama zoroheje ku buzima rusange.`,
+    other: `${langInstruction} Tanga inama z'ibanze kandi ngufi ku bijyanye n'ubuzima n'umutekano.`,
   };
 
-  return prompts[emergencyType] || prompts.other;
+  return prompts[topic] || prompts.other;
 };
 
 /**
- * Build prompt for custom user request
+ * Build custom prompt for user question
  */
 const buildCustomPrompt = (customRequest, locale) => {
-  const languageInstruction = getLanguageInstruction(locale);
-  return `${languageInstruction} A person in Rwanda needs emergency assistance. Their question: "${customRequest}". Provide brief (max 300 characters), actionable, life-saving guidance. Follow your core responsibilities and emergency-specific guidance as applicable.`;
+  const langInstruction = getLanguageInstruction(locale);
+  return `${langInstruction} Umuntu wo mu Rwanda yabajije ikibazo gikurikira: "${customRequest}". Tanga igisubizo ngufi, cyumvikana, gifasha kandi cyuje ubuntu. Niba ari ikibazo cy’ubuzima cyangwa iterambere, fata nk’umujyanama w’umuryango ufasha mu buryo bworoheje.`;
 };
 
 /**
- * Get language instruction for AI
+ * Language control for AI
  */
 const getLanguageInstruction = (locale) => {
   const instructions = {
-    en: "Respond in English.",
-    rw: "Respond in Kinyarwanda (Rwanda's native language).",
-    fr: "Respond in French.",
-    sw: "Respond in Swahili.",
+    rw: "Subiza mu Kinyarwanda, ukoreshe amagambo asanzwe yoroheje kumvwa n'abantu bose.",
+    en: "Respond in English, clearly and simply.",
   };
-  return instructions[locale] || instructions.en;
+  return instructions[locale] || instructions.rw;
 };
 
 /**
- * Format AI response for USSD display
+ * Format response for USSD
  */
 const formatForUSSD = (text) => {
-  // Remove markdown formatting
   let formatted = text.replace(/[*_#]/g, "");
-
-  // Remove extra whitespace
   formatted = formatted.replace(/\s+/g, " ").trim();
 
-  // Limit to reasonable USSD length (around 600 characters for multiple screens)
   if (formatted.length > 600) {
     formatted = formatted.substring(0, 597) + "...";
   }
@@ -151,55 +137,40 @@ const formatForUSSD = (text) => {
 };
 
 /**
- * Get default guidance if AI fails
+ * Default fallback messages
  */
-const getDefaultGuidance = (emergencyType, locale) => {
+const getDefaultGuidance = (topic, locale) => {
   const defaultGuidance = {
-    en: {
-      fire: "FIRE: Get out immediately. Stay low. Don't use elevators. Call 111. Don't go back inside.",
-      medical:
-        "MEDICAL: Call 912. Keep person calm. Don't move if injured. Apply pressure to bleeding. Monitor breathing.",
-      accident:
-        "ACCIDENT: Call 112. Don't move injured. Secure scene. Check breathing. Apply pressure to bleeding.",
-      crime:
-        "CRIME: Get to safety first. Call 112. Remember details. Don't confront. Find witnesses.",
-      other:
-        "EMERGENCY: Stay calm. Call appropriate emergency number. Follow operator instructions. Stay safe.",
-    },
     rw: {
-      fire: "UMURIRO: Sohoka ako kanya. Kora hasi. Ntukoreshe lift. Hamagara 111. Ntugaruke imbere.",
-      medical:
-        "UBUVUZI: Hamagara 912. Humuriza umuntu. Ntumukingure niba yakomeretse. Kanda aho ahumanya amaraso.",
-      accident:
-        "IMPANUKA: Hamagara 112. Ntukingure abakomeretse. Tegura ahantu. Reba uburyo bahumeka.",
-      crime:
-        "ICYAHA: Irinda ubuzima bwawe. Hamagara 112. Wibuke ibisobanuro. Ntukongere.",
+      pregnancy:
+        "Gerageza kuruhuka bihagije, unywe amazi menshi, kandi ujye kwa muganga buri gihe. Niba ubabara, hamagara 114 cyangwa 112.",
+      postpartum:
+        "Wite ku isuku yawe n'iy'umwana. Niba ubabara cyangwa utagira ibyishimo, saba ubufasha kwa muganga cyangwa umujyanama.",
+      counselling:
+        "Uri umuntu ukomeye. Vugana n'inshuti cyangwa umuryango. Ushobora no guhamagara 112 niba ubabaye cyane.",
+      distress:
+        "Igarurire icyizere. Hamagara 112 cyangwa 3512 niba ukeneye ubufasha bwihuse. Ntube wenyine muri ibi bihe.",
+      health:
+        "Kurya neza, gukora imyitozo, no gusinzira neza ni ingenzi. Gerageza kubaho utuje kandi urinde umubiri wawe.",
       other:
-        "IKIBABAJE: Komera. Hamagara nimero ikwiye. Kurikiza inama. Witondere.",
+        "Ibibazo byose bifite ibisubizo. Kurikiza inama z'ubuzima kandi ushake ubufasha igihe bikomeye.",
     },
-    fr: {
-      fire: "FEU: Sortez immédiatement. Restez bas. N'utilisez pas l'ascenseur. Appelez 111.",
-      medical:
-        "MÉDICAL: Appelez 912. Gardez la personne calme. Ne bougez pas si blessé. Appliquez pression sur saignement.",
-      accident:
-        "ACCIDENT: Appelez 112. Ne déplacez pas blessés. Sécurisez zone. Vérifiez respiration.",
-      crime:
-        "CRIME: Mettez-vous en sécurité. Appelez 112. Mémorisez détails. Ne confrontez pas.",
+    en: {
+      pregnancy:
+        "Get enough rest, drink water, and visit the clinic regularly. If you feel pain, call 114 or 112.",
+      postpartum:
+        "Take care of your hygiene and your baby’s. If you feel unwell or sad, talk to a doctor or counselor.",
+      counselling:
+        "You are strong. Talk to someone you trust or call 112 for help.",
+      distress:
+        "Stay calm and seek help. Call 112 or 3512 for immediate assistance.",
+      health:
+        "Eat healthy, stay active, and rest well. Stay calm and take care of your body.",
       other:
-        "URGENCE: Restez calme. Appelez numéro approprié. Suivez instructions. Restez en sécurité.",
-    },
-    sw: {
-      fire: "MOTO: Toka haraka. Kaa chini. Usitumie lifti. Piga 111. Usirudi ndani.",
-      medical:
-        "MATIBABU: Piga 912. Tuliza mtu. Usisogeze ikiwa amejeruhiwa. Bana mahali pa damu.",
-      accident:
-        "AJALI: Piga 112. Usisogeze waliojeruhiwa. Linda eneo. Angalia kupumua.",
-      crime: "UHALIFU: Jilinde kwanza. Piga 112. Kumbuka maelezo. Usipingane.",
-      other:
-        "DHARURA: Tulia. Piga nambari sahihi. Fuata maelekezo. Kaa salama.",
+        "Every problem has a solution. Stay hopeful and seek help when needed.",
     },
   };
 
-  const localeGuidance = defaultGuidance[locale] || defaultGuidance.en;
-  return localeGuidance[emergencyType] || localeGuidance.other;
+  const guidance = defaultGuidance[locale] || defaultGuidance.rw;
+  return guidance[topic] || guidance.other;
 };
