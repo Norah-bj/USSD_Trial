@@ -1,9 +1,8 @@
+// src/middlewares/errorHandler.js
+
 // Global error handler middleware
 export const errorHandler = (err, req, res, next) => {
-  console.error("Error:", err);
-
-  // Log error details for debugging
-  console.error({
+  console.error("❌ Error occurred:", {
     message: err.message,
     stack: err.stack,
     path: req.path,
@@ -11,11 +10,12 @@ export const errorHandler = (err, req, res, next) => {
     body: req.body,
   });
 
-  // Send user-friendly error response
-  res.status(500).send("END An error occurred. Please try again later.");
+  // Send user-friendly USSD response
+  res.status(500).send("END Habaye ikosa. Ongera ugerageze nyuma.");
 };
 
-// 404 handler
+// 404 Not Found handler
 export const notFoundHandler = (req, res) => {
-  res.status(404).send("END Service not found.");
+  console.warn(`⚠️ 404 Not Found: ${req.method} ${req.path}`);
+  res.status(404).send("END Serivisi ntabwo yabonetse.");
 };
