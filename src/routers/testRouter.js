@@ -1,3 +1,4 @@
+// src/routes/testRouter.js
 import express from "express";
 import {
   testSendSMS,
@@ -7,9 +8,25 @@ import {
 
 const router = express.Router();
 
-// Test SMS endpoints
-router.post("/test/send-sms", testSendSMS);
-router.post("/test/send-emergency-sms", testEmergencySMS);
-router.post("/test/send-distress-sms", testDistressSMS);
+/**
+ * Test sending any custom SMS
+ * POST /test/send-sms
+ * Body: { phoneNumber, message }
+ */
+router.post("/send-sms", testSendSMS);
+
+/**
+ * Test sending predefined emergency SMS
+ * POST /test/send-emergency-sms
+ * Body: { phoneNumber }
+ */
+router.post("/send-emergency-sms", testEmergencySMS);
+
+/**
+ * Test sending distress alert SMS
+ * POST /test/send-distress-sms
+ * Body: { phoneNumber }
+ */
+router.post("/send-distress-sms", testDistressSMS);
 
 export default router;

@@ -14,10 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 // Health check route
-app.get("/", (req, res) => {
+app.get("/health", (req, res) => {
   res.json({
     status: "success",
-    message: "INKINGI Rescue USSD & SMS Server is Running!",
+    message: "MotherLink & SMS Server is Running!",
     version: "1.0.0",
     endpoints: {
       ussd: "/ussd",
@@ -30,19 +30,22 @@ app.get("/", (req, res) => {
   });
 });
 
-// Routes
-app.use("/", ussdRouter);
-app.use("/", smsRouter);
-app.use("/", testRouter);
+// Routers with proper prefixes
+app.use("/ussd", ussdRouter);
+app.use("/sms", smsRouter);
+app.use("/test", testRouter);
 
-// Error handling
+// Error handling middlewares
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 INKINGI Rescue Server running on port ${PORT}`);
+  console.log(`🚀 MotherLink Server running on port ${PORT}`);
   console.log(`📱 USSD endpoint: http://localhost:${PORT}/ussd`);
   console.log(`📧 SMS incoming: http://localhost:${PORT}/sms/incoming`);
   console.log(`📊 SMS delivery: http://localhost:${PORT}/sms/delivery-reports`);
+  console.log(`🧪 Test SMS endpoints: /test/send-sms, /test/send-emergency-sms, /test/send-distress-sms`);
 });
+
+export default app;
