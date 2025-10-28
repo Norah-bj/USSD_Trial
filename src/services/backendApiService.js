@@ -1,233 +1,212 @@
+// src/services/backendApiService.js
 import axios from "axios";
 import { BACKEND_API_CONFIG, BACKEND_ENDPOINTS } from "../config/backendApi.js";
 
-// Create axios instance with default config
+// Initialize Axios client
 const apiClient = axios.create({
   baseURL: BACKEND_API_CONFIG.BASE_URL,
   timeout: BACKEND_API_CONFIG.TIMEOUT,
   headers: BACKEND_API_CONFIG.HEADERS,
 });
 
-// Request interceptor for logging
+// Interceptors (for logging)
 apiClient.interceptors.request.use(
   (config) => {
-    console.log(`🌐 Backend API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    console.log(`🚀 Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
-    console.error("❌ Backend API Request Error:", error);
+    console.error("❌ Request Error:", error);
     return Promise.reject(error);
   }
 );
 
-// Response interceptor for logging
 apiClient.interceptors.response.use(
   (response) => {
-    console.log(`✅ Backend API Response: ${response.status} ${response.config.url}`);
+    console.log(`✅ Response: ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
-    console.error(`❌ Backend API Error: ${error.response?.status || 'Network Error'} ${error.config?.url}`);
+    console.error(
+      `❌ Response Error: ${error.response?.status || "Network Error"} ${
+        error.config?.url
+      }`
+    );
     return Promise.reject(error);
   }
 );
 
+/* -----------------------------------------------------
+   👩🏾‍🍼 USER REGISTRATION & PROFILE MANAGEMENT
+------------------------------------------------------ */
+
 /**
- * Report emergency to backend
- * @param {Object} emergencyData - Emergency data
- * @returns {Promise<Object>}
+ * Register a new pregnant user
+ * @param {Object} userData
  */
-export const reportEmergency = async (emergencyData) => {
+export const registerPregnantUser = async (userData) => {
   try {
-    const response = await apiClient.post(BACKEND_ENDPOINTS.REPORT_EMERGENCY, emergencyData);
-    return {
-      success: true,
-      data: response.data,
-    };
+    const res = await apiClient.post(
+      BACKEND_ENDPOINTS.CREATE_PREGNANT_USER,
+      userData
+    );
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error reporting emergency:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error registering pregnant user:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
 /**
- * Get all emergencies
- * @param {Object} params - Query parameters (limit, offset, status)
- * @returns {Promise<Object>}
+ * Register a new mother user
+ * @param {Object} userData
  */
-export const getEmergencies = async (params = {}) => {
+export const registerMotherUser = async (userData) => {
   try {
-    const response = await apiClient.get(BACKEND_ENDPOINTS.GET_EMERGENCIES, { params });
-    
-    // Transform backend response to match expected format
-    const emergencies = response.data?.data || [];
-    
-    return {
-      success: true,
-      data: {
-        emergencies: emergencies,
-        total: emergencies.length,
-      },
-    };
+    const res = await apiClient.post(
+      BACKEND_ENDPOINTS.CREATE_MOTHER_USER,
+      userData
+    );
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error fetching emergencies:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error registering mother user:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
 /**
- * Get emergency by ID
- * @param {string} emergencyId - Emergency ID
- * @returns {Promise<Object>}
+ * Get user info by phone number
+ * @param {string} phoneNumber
  */
-export const getEmergencyById = async (emergencyId) => {
+export const getUser = async (phoneNumber) => {
   try {
-    const response = await apiClient.get(`${BACKEND_ENDPOINTS.GET_EMERGENCY_BY_ID}/${emergencyId}`);
-    
-    // Transform backend response
-    const emergency = response.data?.data || response.data;
-    
-    return {
-      success: true,
-      data: emergency,
-    };
-  } catch (error) {
-    console.error("Error fetching emergency:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
-  }
-};
-
-/**
- * Get user's emergencies
- * @param {string} phoneNumber - User phone number
- * @returns {Promise<Object>}
- */
-export const getUserEmergencies = async (phoneNumber) => {
-  try {
-    const response = await apiClient.get(BACKEND_ENDPOINTS.GET_USER_EMERGENCIES, {
+    const res = await apiClient.get(BACKEND_ENDPOINTS.GET_USER, {
       params: { phoneNumber },
     });
-    
-    // Transform backend response to match expected format
-    const emergencies = response.data?.data || [];
-    
-    return {
-      success: true,
-      data: {
-        emergencies: emergencies,
-        total: emergencies.length,
-      },
-    };
+    return { success: true, data: res.data };
+  } catch (error) {
+    console.error("Error getting user info:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
+  }
+};
+
+/**
+ * Update user information
+ * @param {Object} updateData
+ */
+export const updateUserInfo = async (updateData) => {
+  try {
+    const res = await apiClient.put(BACKEND_ENDPOINTS.UPDATE_USER_INFO, updateData);
+    return { success: true, data: res.data };
+  } catch (error) {
+    console.error("Error updating user info:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
+  }
+};
+
+/* -----------------------------------------------------
+   🚨 EMERGENCY & DISTRESS
+------------------------------------------------------ */
+
+export const reportEmergency = async (emergencyData) => {
+  try {
+    const res = await apiClient.post(
+      BACKEND_ENDPOINTS.REPORT_EMERGENCY,
+      emergencyData
+    );
+    return { success: true, data: res.data };
+  } catch (error) {
+    console.error("Error reporting emergency:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
+  }
+};
+
+export const getEmergencies = async (params = {}) => {
+  try {
+    const res = await apiClient.get(BACKEND_ENDPOINTS.GET_EMERGENCIES, { params });
+    return { success: true, data: res.data?.data || [] };
+  } catch (error) {
+    console.error("Error fetching emergencies:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
+  }
+};
+
+export const getEmergencyById = async (emergencyId) => {
+  try {
+    const res = await apiClient.get(
+      `${BACKEND_ENDPOINTS.GET_EMERGENCY_BY_ID}/${emergencyId}`
+    );
+    return { success: true, data: res.data };
+  } catch (error) {
+    console.error("Error fetching emergency:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
+  }
+};
+
+export const getUserEmergencies = async (phoneNumber) => {
+  try {
+    const res = await apiClient.get(BACKEND_ENDPOINTS.GET_USER_EMERGENCIES, {
+      params: { phoneNumber },
+    });
+    return { success: true, data: res.data?.data || [] };
   } catch (error) {
     console.error("Error fetching user emergencies:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
-/**
- * Trigger distress alert
- * @param {Object} distressData - Distress alert data (phoneNumber, message, location)
- * @returns {Promise<Object>}
- */
-export const triggerDistressAlert = async (distressData) => {
+export const triggerDistress = async (distressData) => {
   try {
-    const response = await apiClient.post(BACKEND_ENDPOINTS.TRIGGER_DISTRESS, distressData);
-    return {
-      success: true,
-      data: response.data,
-    };
+    const res = await apiClient.post(
+      BACKEND_ENDPOINTS.TRIGGER_DISTRESS,
+      distressData
+    );
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error triggering distress alert:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error triggering distress:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
-/**
- * Get community posts
- * @param {Object} params - Query parameters (limit, offset)
- * @returns {Promise<Object>}
- */
-export const getPosts = async (params = {}) => {
+/* -----------------------------------------------------
+   🧠 AI ASSISTANCE
+------------------------------------------------------ */
+
+export const getAIGuidance = async (query) => {
   try {
-    const response = await apiClient.get(BACKEND_ENDPOINTS.GET_POSTS, { params });
-    
-    // Transform backend response to match expected format
-    const posts = response.data?.data || [];
-    
-    return {
-      success: true,
-      data: {
-        posts: posts,
-        total: posts.length,
-      },
-    };
+    const res = await apiClient.get(BACKEND_ENDPOINTS.GET_AI_GUIDANCE, {
+      params: { query },
+    });
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error fetching posts:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error getting AI guidance:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
-/**
- * Get post by ID
- * @param {string} postId - Post ID
- * @returns {Promise<Object>}
- */
-export const getPostById = async (postId) => {
+export const submitCustomQuestion = async (questionData) => {
   try {
-    const response = await apiClient.get(`${BACKEND_ENDPOINTS.GET_POST_BY_ID}/${postId}`);
-    
-    // Transform backend response
-    const post = response.data?.data || response.data;
-    
-    return {
-      success: true,
-      data: post,
-    };
+    const res = await apiClient.post(
+      BACKEND_ENDPOINTS.SUBMIT_CUSTOM_QUESTION,
+      questionData
+    );
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error fetching post:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error submitting custom question:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
 
-/**
- * Create or get user
- * @param {Object} userData - User data
- * @returns {Promise<Object>}
- */
-export const createOrGetUser = async (userData) => {
+/* -----------------------------------------------------
+   ⚙️ SETTINGS
+------------------------------------------------------ */
+
+export const getSettings = async () => {
   try {
-    const response = await apiClient.post(BACKEND_ENDPOINTS.CREATE_USER, userData);
-    return {
-      success: true,
-      data: response.data,
-    };
+    const res = await apiClient.get(BACKEND_ENDPOINTS.GET_SETTINGS);
+    return { success: true, data: res.data };
   } catch (error) {
-    console.error("Error creating/getting user:", error.message);
-    return {
-      success: false,
-      error: error.response?.data?.message || error.message,
-    };
+    console.error("Error fetching settings:", error.message);
+    return { success: false, error: error.response?.data?.message || error.message };
   }
 };
-
