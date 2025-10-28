@@ -54,3 +54,4 @@ export const SMS_CONFIG = {
 
 // Session timeout (milliseconds)
 export const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
