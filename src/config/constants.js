@@ -1,51 +1,56 @@
 // Application constants
 export const APP_CONFIG = {
-  NAME: "INKINGI Rescue",
+  NAME: "MotherLink",
   VERSION: "1.0.0",
-  DEFAULT_LANGUAGE: "en",
+  DEFAULT_LANGUAGE: "rw", // Kinyarwanda as default
 };
 
-// Emergency types
+// MotherLink menu options
+export const MAIN_MENU = {
+  REGISTRATION: 1,
+  UPDATE_INFO: 2,
+  ASK_QUESTION: 3,
+  DISTRESS: 4,
+  AI_ASSISTANCE: 5,
+  SETTINGS: 6,
+  GO_BACK: 0,
+};
+
+// Emergency types for mothers
 export const EMERGENCY_TYPES = {
-  FIRE: "fire",
-  MEDICAL: "medical",
-  ASSAULT: "assault",
-  CORRUPTION: "corruption",
-  ACCIDENT: "accident",
+  PREGNANT: "pregnant",
+  MOTHER: "mother",
+  CHILD: "child",
   OTHER: "other",
 };
 
 // Emergency type labels
 export const EMERGENCY_TYPE_LABELS = {
-  1: { type: "fire", label: "Fire" },
-  2: { type: "medical", label: "Medical" },
-  3: { type: "assault", label: "Assault" },
-  4: { type: "corruption", label: "Corruption" },
-  5: { type: "accident", label: "Accident" },
-  6: { type: "other", label: "Other" },
+  1: { type: "pregnant", label: "Umubyeyi utwite" },
+  2: { type: "mother", label: "Umubyeyi wabyaye" },
+  3: { type: "child", label: "Umwana" },
+  4: { type: "other", label: "Ikindi" },
 };
 
 // Hotline numbers
 export const HOTLINES = {
   POLICE: "112",
-  FIRE: "113",
-  AMBULANCE: "114",
+  FIRE: "111",
+  AMBULANCE: "912",
 };
 
 // Supported languages
 export const LANGUAGES = {
   ENGLISH: "en",
   KINYARWANDA: "rw",
-  FRENCH: "fr",
-  KISWAHILI: "sw",
 };
 
 // SMS Configuration
 export const SMS_CONFIG = {
-  SENDER_ID: "INKINGI", // Your approved sender ID
-  MAX_LENGTH: 160, // Standard SMS length
+  SENDER_ID: "MotherLink", // Approved sender ID
+  MAX_LENGTH: 160,         // Standard SMS length
   ENABLE_DELIVERY_REPORTS: true,
 };
 
-// Session timeout (in milliseconds)
+// Session timeout (milliseconds)
 export const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
