@@ -6,73 +6,51 @@ import { dirname, join } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load translation files
-const en = JSON.parse(
-  readFileSync(join(__dirname, "../locales/en.json"), "utf-8")
-);
-const rw = JSON.parse(
-  readFileSync(join(__dirname, "../locales/rw.json"), "utf-8")
-);
-const fr = JSON.parse(
-  readFileSync(join(__dirname, "../locales/fr.json"), "utf-8")
-);
-const sw = JSON.parse(
-  readFileSync(join(__dirname, "../locales/sw.json"), "utf-8")
-);
+// Load translations
+const rw = JSON.parse(readFileSync(join(__dirname, "../locales/rw.json"), "utf-8"));
+const en = JSON.parse(readFileSync(join(__dirname, "../locales/en.json"), "utf-8"));
 
 // Initialize i18n
 const i18n = new I18n({
+  rw, // Kinyarwanda first
   en,
-  rw,
-  fr,
-  sw,
 });
 
-// Set default locale
-i18n.defaultLocale = "en";
-i18n.locale = "en";
-
-// Enable fallback to default locale
+i18n.defaultLocale = "rw"; // Default language
+i18n.locale = "rw";        // Active language
 i18n.enableFallback = true;
 
 /**
- * Get translation for a key
+ * Translate text by key
  * @param {string} key - Translation key
- * @param {Object} options - Interpolation options
- * @param {string} locale - Locale to use (optional)
- * @returns {string} Translated text
+ * @param {Object} options - Interpolation values
+ * @param {string} locale - Optional locale override
+ * @returns {string}
  */
 export const t = (key, options = {}, locale = null) => {
-  if (locale) {
-    return i18n.t(key, { ...options, locale });
-  }
-  return i18n.t(key, options);
+  return i18n.t(key, { ...options, locale: locale || i18n.locale });
 };
 
 /**
- * Set the current locale
- * @param {string} locale - Locale code (en, rw, fr, sw)
+ * Set the current language
+ * @param {string} locale - 'rw' or 'en'
  */
 export const setLocale = (locale) => {
-  if (["en", "rw", "fr", "sw"].includes(locale)) {
-    i18n.locale = locale;
-  }
+  if (["rw", "en"].includes(locale)) i18n.locale = locale;
 };
 
 /**
- * Get the current locale
- * @returns {string} Current locale code
+ * Get the current language
+ * @returns {string}
  */
-export const getLocale = () => {
-  return i18n.locale;
-};
+export const getLocale = () => i18n.locale;
 
 /**
- * Get translation for a specific locale
+ * Translate using a specific locale directly
  * @param {string} key - Translation key
- * @param {string} locale - Locale code
- * @param {Object} options - Interpolation options
- * @returns {string} Translated text
+ * @param {string} locale - 'rw' or 'en'
+ * @param {Object} options
+ * @returns {string}
  */
 export const tl = (key, locale, options = {}) => {
   return i18n.t(key, { ...options, locale });
