@@ -50,6 +50,8 @@ export const SMS_CONFIG = {
   SENDER_ID: "MotherLink", // Approved sender ID
   MAX_LENGTH: 160,         // Standard SMS length
   ENABLE_DELIVERY_REPORTS: true,
+  SMS_API_URL: process.env.SMS_API_URL || "https://api.africastalking.com/version1/messaging",
+  API_KEY: process.env.SMS_API_KEY || "your-africastalking-api-key",
 };
 
 // Session timeout (milliseconds)
