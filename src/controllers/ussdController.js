@@ -9,9 +9,9 @@ import {
 } from "./smsController.js";
 import {
   reportEmergency,
-  getUserEmergencies,
+  // getUserEmergencies,
   triggerDistressAlert,
-  getPosts,
+  // getPosts,
 } from "../services/backendApiService.js";
 import { getEmergencyGuidance } from "../services/aiService.js";
 

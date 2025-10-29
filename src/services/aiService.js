@@ -41,7 +41,7 @@ export const getMotherlinkGuidance = async (
     const systemPrompt = `${systemInstructions}\nMake responses short, friendly, and easy to understand for USSD users.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // You can upgrade to gpt-4-turbo if available
+      model: "gpt-3.5-turbo", // You can upgrade to gpt-4-turbo or gpt-4o-mini
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -154,4 +154,30 @@ const getDefaultGuidance = (topic, locale) => {
 
   const guidance = defaultGuidance[locale] || defaultGuidance.rw;
   return guidance[topic] || guidance.other;
+};
+
+/**
+ * Emergency-specific AI response (for USSD quick guidance)
+ */
+export const getEmergencyGuidance = async (prompt) => {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // or "gpt-4o-mini" if available
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an emergency assistant for Rwandans via USSD. Keep answers short (max 500 characters), in simple Kinyarwanda when possible.",
+        },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.7,
+    });
+
+    const aiText = response.choices[0].message.content.trim();
+    return formatForUSSD(aiText);
+  } catch (error) {
+    console.error("Emergency AI Error:", error);
+    return "Ntitwashoboye kugufasha ubu. Gerageza kongera cyangwa hamagara 112.";
+  }
 };

@@ -155,7 +155,7 @@ export const getUserEmergencies = async (phoneNumber) => {
   }
 };
 
-export const triggerDistress = async (distressData) => {
+export const triggerDistressAlert = async (distressData) => {
   try {
     const res = await apiClient.post(
       BACKEND_ENDPOINTS.TRIGGER_DISTRESS,

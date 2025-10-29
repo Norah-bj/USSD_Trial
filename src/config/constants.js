@@ -54,6 +54,11 @@ export const SMS_CONFIG = {
   API_KEY: process.env.SMS_API_KEY || "your-africastalking-api-key",
 };
 
+export const SMS_TEMPLATES = {
+  EMERGENCY: "MotherLink Emergency",
+  DISTRESS: "MotherLink Distress Alert",
+};
+
 // Session timeout (milliseconds)
 export const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
