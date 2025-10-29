@@ -1,4 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
+// src/services/aiService.js
+import OpenAI from "openai";
 import dotenv from "dotenv";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -9,15 +10,15 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load AI system instructions (you can customize this file)
+// Load AI system instructions (optional custom guide file)
 const systemInstructions = readFileSync(
   join(__dirname, "../config/ai-instructions.txt"),
   "utf-8"
 );
 
-// Initialize Gemini AI
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+// Initialize OpenAI Client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 /**
@@ -33,43 +34,23 @@ export const getMotherlinkGuidance = async (
   locale = "rw"
 ) => {
   try {
-    const config = {
-      systemInstruction: [
-        {
-          text: systemInstructions,
-        },
-      ],
-    };
-
-    const model = "gemini-flash-lite-latest";
-
-    // Build user prompt
     const userPrompt = customRequest
       ? buildCustomPrompt(customRequest, locale)
       : buildTopicPrompt(topic, locale);
 
-    const contents = [
-      {
-        role: "user",
-        parts: [{ text: userPrompt }],
-      },
-    ];
+    const systemPrompt = `${systemInstructions}\nMake responses short, friendly, and easy to understand for USSD users.`;
 
-    // Generate AI response
-    const response = await ai.models.generateContentStream({
-      model,
-      config,
-      contents,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo", // You can upgrade to gpt-4-turbo if available
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.7,
     });
 
-    // Combine streamed text
-    let fullText = "";
-    for await (const chunk of response) {
-      fullText += chunk.text;
-    }
-
-    // Format for USSD (short, clean)
-    const formattedText = formatForUSSD(fullText);
+    const aiText = completion.choices[0].message.content;
+    const formattedText = formatForUSSD(aiText);
 
     return {
       success: true,
