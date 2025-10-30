@@ -1,23 +1,26 @@
-// src/config/db.js
+// src/config/database.js
 import pkg from "pg";
 import dotenv from "dotenv";
-dotenv.config();
+
+dotenv.config(); // Load environment variables
 
 const { Pool } = pkg;
 
+// Check if DATABASE_URL exists
+if (!process.env.DATABASE_URL) {
+  console.error("❌ DATABASE_URL is missing in your .env file");
+  process.exit(1);
+}
+
+// Create PostgreSQL connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Important for Neon
+    rejectUnauthorized: false, // Required for Neon, Supabase, or any cloud PostgreSQL
   },
 });
 
-// pool
-//   .connect()
-//   .then(() => console.log("✅ Connected to Neon PostgreSQL"))
-//   .catch((err) => console.error("❌ DB connection error:", err));
-
-// Test connection immediately
+// Test the connection immediately
 (async () => {
   try {
     const res = await pool.query("SELECT NOW()");

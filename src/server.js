@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import ussdRouter from "./routers/ussdRouter.js";
 import smsRouter from "./routers/smsRouter.js";
@@ -5,10 +8,8 @@ import testRouter from "./routers/testRouter.js";
 import { requestLogger } from "./middlewares/requestLogger.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 // import { i18n } from "./config/i18n.js";
-import "./config/database.js";
-import dotenv from "dotenv";
+// import "./config/database.js";
 
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;

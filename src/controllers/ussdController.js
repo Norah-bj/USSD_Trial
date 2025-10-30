@@ -1,5 +1,6 @@
 // src/controllers/ussdController.js
 import { getUssdMenus } from "../config/ussdMenus.js";
+import pool from "../config/database.js";
 import { sessionManager } from "../utils/sessionManager.js";
 import { EMERGENCY_TYPE_LABELS } from "../config/constants.js";
 import { t } from "../config/i18n.js";
@@ -19,14 +20,14 @@ import { getEmergencyGuidance } from "../services/aiService.js";
  * Language handlers - set language and redirect to main menu
  */
 export const languageHandlers = {
-  en: async (userData) => {
-    sessionManager.setLanguage(userData.sessionId, "en");
-    const menus = getUssdMenus("en");
-    return menus.main.text;
-  },
   rw: async (userData) => {
     sessionManager.setLanguage(userData.sessionId, "rw");
     const menus = getUssdMenus("rw");
+    return menus.main.text;
+  },
+  en: async (userData) => {
+    sessionManager.setLanguage(userData.sessionId, "en");
+    const menus = getUssdMenus("en");
     return menus.main.text;
   },
 };
@@ -54,6 +55,52 @@ const getEmergencyTypeFromSession = (sessionId, text) => {
  * Terminal handlers - end USSD session actions
  */
 export const terminalHandlers = {
+    // ----------------------
+  // 🟢 Registration complete: save to Neon DB
+  registrationComplete: async (userData) => {
+    try {
+      const session = sessionManager.getSession(userData.sessionId);
+      const formData = session?.formData || {};
+
+      const newUser = {
+        name: formData.regStepName || "",
+        nationalId: formData.regStepId || "",
+        insurance: formData.regStepInsurance || "",
+        location: formData.regStepLocation || "",
+        pregnancyMonths: formData.regStepPregnancyMonths || "",
+        healthCenter: formData.regStepHealthCenter || "",
+        phoneNumber: userData.phoneNumber,
+      };
+
+      const query = `
+        INSERT INTO users (name, nationalid, insurance, location, pregnancymonths, healthcenter, phonenumber)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
+      `;
+      const values = [
+        newUser.name,
+        newUser.nationalId,
+        newUser.insurance,
+        newUser.location,
+        newUser.pregnancyMonths,
+        newUser.healthCenter,
+        newUser.phoneNumber,
+      ];
+
+      const result = await pool.query(query, values);
+      console.log("🟢 New user saved:", result.rows[0]);
+
+      sessionManager.clearSession(userData.sessionId);
+      return `END Murakoze! Kwiyandikisha byagenze neza.`;
+    } catch (error) {
+      console.error("❌ Error saving registration:", error);
+      return `END Habaye ikibazo mu kubika amakuru yawe.`;
+    }
+  },
+
+  // ----------------------
+  // 🟢 Submit emergency
+
   submitEmergency: async (userData) => {
     try {
       const referenceId = generateReferenceId();
@@ -104,6 +151,9 @@ export const terminalHandlers = {
     }
   },
 
+  // ----------------------
+  // 🟢 Confirm distress
+
   confirmDistress: async (userData) => {
     try {
       const referenceId = generateReferenceId();
@@ -133,6 +183,9 @@ export const terminalHandlers = {
     }
   },
 
+  // ----------------------
+  // 🟢 Get AI guidance
+
   getAIGuidance: async (userData) => {
     try {
       const locale = userData.locale || "en";
@@ -155,44 +208,60 @@ export const terminalHandlers = {
  */
 export const handleUSSDRequest = async (text, userData) => {
   const levels = text.split("*");
-  const session = sessionManager.getSession(userData.sessionId);
-  const locale = session?.language || "rw";
+  let session = sessionManager.getSession(userData.sessionId);
+
+  // create new session if not found
+  if (!session) {
+    session = { sessionId: userData.sessionId, formData: {}, language: "rw" };
+    sessionManager.setSession(userData.sessionId, session);
+  }
+
+  const locale = session.language || "rw";
   const ussdMenus = getUssdMenus(locale);
 
   if (text === "") return ussdMenus.welcome.text;
 
   let currentMenu = "welcome";
 
-for (let i = 0; i < levels.length; i++) {
-  const choice = levels[i];
-  const menu = ussdMenus[currentMenu];
+  for (let i = 0; i < levels.length; i++) {
+    const choice = levels[i];
+    const menu = ussdMenus[currentMenu];
 
-  if (!menu) return `END ${t("responses.invalid_option", {}, locale)}`;
+    if (!menu) return `END ${t("responses.invalid_option", {}, locale)}`;
 
-  let nextStep = menu.options?.[choice];
+    let nextStep = menu.options?.[choice];
 
-  // 🧠 NEW: If user typed text and menu accepts input, use wildcard route
-  if (!nextStep && menu.acceptsInput && menu.options?.["*"]) {
-    nextStep = menu.options["*"];
+    // If user types input and menu accepts input, use wildcard route
+    if (!nextStep && menu.acceptsInput && menu.options?.["*"]) {
+      nextStep = menu.options["*"];
+    }
+
+    if (!nextStep) return `END ${t("responses.invalid_option", {}, locale)}`;
+
+    // Store input safely
+    if (menu.acceptsInput) {
+      session.formData = session.formData || {};
+      session.formData[currentMenu] = choice;
+      sessionManager.setSession(userData.sessionId, session);
+    }
+
+    if (languageHandlers[nextStep]) return await languageHandlers[nextStep](userData);
+
+    if (terminalHandlers[nextStep]) {
+      userData.text = text;
+      userData.locale = locale;
+      return await terminalHandlers[nextStep](userData);
+    }
+
+    if (ussdMenus[nextStep]) {
+      currentMenu = nextStep;
+      if (i === levels.length - 1) return ussdMenus[nextStep].text;
+    }
   }
-
-  if (!nextStep) return `END ${t("responses.invalid_option", {}, locale)}`;
-
-  if (languageHandlers[nextStep]) return await languageHandlers[nextStep](userData);
-  if (terminalHandlers[nextStep]) {
-    userData.text = text;
-    userData.locale = locale;
-    return await terminalHandlers[nextStep](userData);
-  }
-
-  if (ussdMenus[nextStep]) {
-    currentMenu = nextStep;
-    if (i === levels.length - 1) return ussdMenus[nextStep].text;
-  }
-}
 
   return `END ${t("responses.invalid_option", {}, locale)}`;
 };
+
 
 /**
  * USSD webhook controller
