@@ -41,8 +41,8 @@ export const HOTLINES = {
 
 // Supported languages
 export const LANGUAGES = {
-  ENGLISH: "en",
   KINYARWANDA: "rw",
+  ENGLISH: "en",
 };
 
 // SMS Configuration
