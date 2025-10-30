@@ -163,28 +163,33 @@ export const handleUSSDRequest = async (text, userData) => {
 
   let currentMenu = "welcome";
 
-  for (let i = 0; i < levels.length; i++) {
-    const choice = levels[i];
-    const menu = ussdMenus[currentMenu];
+for (let i = 0; i < levels.length; i++) {
+  const choice = levels[i];
+  const menu = ussdMenus[currentMenu];
 
-    if (!menu) return `END ${t("responses.invalid_option", {}, locale)}`;
+  if (!menu) return `END ${t("responses.invalid_option", {}, locale)}`;
 
-    const nextStep = menu.options?.[choice];
+  let nextStep = menu.options?.[choice];
 
-    if (!nextStep) return `END ${t("responses.invalid_option", {}, locale)}`;
-
-    if (languageHandlers[nextStep]) return await languageHandlers[nextStep](userData);
-    if (terminalHandlers[nextStep]) {
-      userData.text = text;
-      userData.locale = locale;
-      return await terminalHandlers[nextStep](userData);
-    }
-
-    if (ussdMenus[nextStep]) {
-      currentMenu = nextStep;
-      if (i === levels.length - 1) return ussdMenus[nextStep].text;
-    }
+  // 🧠 NEW: If user typed text and menu accepts input, use wildcard route
+  if (!nextStep && menu.acceptsInput && menu.options?.["*"]) {
+    nextStep = menu.options["*"];
   }
+
+  if (!nextStep) return `END ${t("responses.invalid_option", {}, locale)}`;
+
+  if (languageHandlers[nextStep]) return await languageHandlers[nextStep](userData);
+  if (terminalHandlers[nextStep]) {
+    userData.text = text;
+    userData.locale = locale;
+    return await terminalHandlers[nextStep](userData);
+  }
+
+  if (ussdMenus[nextStep]) {
+    currentMenu = nextStep;
+    if (i === levels.length - 1) return ussdMenus[nextStep].text;
+  }
+}
 
   return `END ${t("responses.invalid_option", {}, locale)}`;
 };
