@@ -32,7 +32,7 @@ export const EMERGENCY_TYPE_LABELS = {
   4: { type: "other", label: "Ikindi" },
 };
 
-// Hotline numbers
+// Hotline numbers for further assistance
 export const HOTLINES = {
   POLICE: "112",
   FIRE: "111",

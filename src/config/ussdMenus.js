@@ -15,8 +15,8 @@ export const getUssdMenus = (locale = "en") => {
     welcome: {
       text: `CON ${t("welcome.title", {}, locale)}
     ${t("welcome.select_language", {}, locale)}
-    1. ${t("welcome.english", {}, locale)}
-    2. ${t("welcome.kinyarwanda", {}, locale)}
+    1. ${t("welcome.kinyarwanda", {}, locale)}
+    2. ${t("welcome.english", {}, locale)}
     `,
       options: {
         1: "main",
