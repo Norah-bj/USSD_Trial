@@ -76,14 +76,11 @@ export const getUssdMenus = (locale = "en") => {
     },
 
     regStepInsurance: {
-      text: `CON ${t("registration.step_insurance", {}, locale)}
-    1. ${t("common.confirm", {}, locale)}
-    2. ${t("common.cancel", {}, locale)}
-    `,
+      text: `CON ${t("registration.step_insurance", {}, locale)}`,
       options: {
-        1: "regStepLocation",
-        2: "regStepLocation",
+        "*": "regStepLocation",
       },
+      acceptsInput: true,
     },
 
     regStepLocation: {
