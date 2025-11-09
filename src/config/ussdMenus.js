@@ -32,6 +32,7 @@ export const getUssdMenus = (locale = "en") => {
     4. ${t("main.distress", {}, locale)}
     5. ${t("main.ai_assistance", {}, locale)}
     6. ${t("main.settings", {}, locale)}
+    7. ${t("main.appointment", {}, locale)}  // DEVELOPING
     0. ${t("common.go_back", {}, locale)}
     `,
       options: {
@@ -214,6 +215,41 @@ export const getUssdMenus = (locale = "en") => {
       text: `END ${t("responses.distress_activated", { reference: "ML123" }, locale)}`,
       options: {},
     },
+
+    // 🟢 Appointment Booking
+    checkAppointment: {
+      text: `CON Checking your registration...`,
+      options: async (phoneNumber) => {
+        const isRegistered = await checkUserInDb(phoneNumber); // your DB check function
+        if (!isRegistered) {
+          return {
+            text: `END You are not registered yet. Please register first to use the appointment service.`,
+          };
+        } else {
+          return {
+            text: `CON Your appointments:
+              1. View upcoming appointments
+              2. Book a new appointment
+              0. ${t("common.go_back", {}, locale)}`,
+            options: {
+              1: "viewAppointments",
+              2: "bookAppointment",
+              0: "main",
+            },
+          };
+        }
+      },
+    },
+
+// viewAppointments: {
+//   text: `END You have no upcoming appointments.`,
+//   options: {},
+// },
+
+// bookAppointment: {
+//   text: `END You have no upcoming appointments.`,
+//   options: {},
+// },
 
     // 🟣 AI Health Tips
     aiAssistance: {

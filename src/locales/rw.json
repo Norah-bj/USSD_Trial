@@ -14,6 +14,7 @@
     "distress": "Ubutabazi",
     "ai_assistance": "Inama z'ubuzima",
     "settings": "Igenamiterere",
+    "appointment": "Gahunda z'ubuzima",
     "go_back": "Subira inyuma"
   },
   "registration": {
@@ -74,6 +75,16 @@
     "message": "Uri mu kaga gakomeye? Niba ari byo, emeza kandi ubufasha buzaza ako kanya.",
     "confirm": "Emeza",
     "cancel": "Hagarika"
+  },
+  "appointment": {
+    "view_appointments": "Reba Gahunda z'ubuzima",
+    "make_appointment": " Saba Gahunda y'ubuzima",
+    "go_back": "Subira inyuma"
+  },
+  "terms": {
+    "title": "Amabwiriza yo Gukoresha",
+    "content": "Amabwiriza yo Gukoresha",
+    "go_back": "Subira inyuma"
   },
   "settings": {
     "title": "Igenamiterere",
