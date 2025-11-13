@@ -92,11 +92,18 @@ export const terminalHandlers = {
 
       sessionManager.clearSession(userData.sessionId);
       return `END Murakoze! Kwiyandikisha byagenze neza.`;
-    } catch (error) {
-      console.error("❌ Error saving registration:", error);
-      return `END Habaye ikibazo mu kubika amakuru yawe.`;
+
+    } catch (err) {
+      if (err.code === "23505") {
+        console.log("⚠️ User already registered:", userData.phoneNumber);
+        return `END Ubusanzwe wariyandikishije. Murakoze!`;
+      } else {
+        console.error("❌ Error saving registration:", err);
+        return `END Habaye ikibazo mu kubika amakuru yawe.`;
+      }
     }
   },
+
 
   // ----------------------
   // 🟢 Submit emergency
@@ -268,10 +275,18 @@ export const handleUSSDRequest = async (text, userData) => {
  */
 export const ussdHandler = async (req, res) => {
   const { sessionId, serviceCode, phoneNumber, text } = req.body;
-
   const userData = { sessionId, serviceCode, phoneNumber };
-  const response = await handleUSSDRequest(text, userData);
 
-  res.set("Content-Type", "text/plain");
-  res.send(response);
+  // respond quickly (<5s)
+  handleUSSDRequest(text, userData)
+    .then((response) => {
+      res.set("Content-Type", "text/plain");
+      res.send(response);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.set("Content-Type", "text/plain");
+      res.send("END An error occurred. Please try again later.");
+    });
 };
+
