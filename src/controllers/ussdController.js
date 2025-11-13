@@ -30,6 +30,51 @@ export const languageHandlers = {
     const menus = getUssdMenus("en");
     return menus.main.text;
   },
+  
+  // ----------------------
+  // 🟢 Persist user info updates
+  updateSuccess: async (userData) => {
+    try {
+      const session = sessionManager.getSession(userData.sessionId);
+      const formData = session?.formData || {};
+      const lastKey = session?.lastInputKey;
+
+      if (!lastKey) {
+        return `END ${t("responses.invalid_option", {}, userData.locale || "rw")}`;
+      }
+
+      const columnMap = {
+        updateLocation: { column: "location", value: formData.updateLocation },
+        updateInsurance: { column: "insurance", value: formData.updateInsurance },
+        updateId: { column: "nationalid", value: formData.updateId },
+        updateHealthCenter: { column: "healthcenter", value: formData.updateHealthCenter },
+        updatePregnancyMonths: { column: "pregnancymonths", value: formData.updatePregnancyMonths },
+      };
+
+      const mapping = columnMap[lastKey];
+      if (!mapping || mapping.value == null || mapping.value === "") {
+        return `END ${t("responses.invalid_option", {}, userData.locale || "rw")}`;
+      }
+
+      const query = `UPDATE users SET ${mapping.column} = $1 WHERE phonenumber = $2 RETURNING *;`;
+      const values = [mapping.value, userData.phoneNumber];
+
+      const result = await pool.query(query, values);
+      if (result.rowCount === 0) {
+        return `END ${t("responses.unable_to_load", { item: "user" }, userData.locale || "rw")}`;
+      }
+
+      // clear the consumed input
+      const newFormData = { ...formData };
+      delete newFormData[lastKey];
+      sessionManager.setSession(userData.sessionId, { formData: newFormData, lastInputKey: null });
+
+      return `END ${t("update_info.update_success", {}, userData.locale || "rw")}`;
+    } catch (err) {
+      console.error("❌ Error updating user info:", err);
+      return `END ${t("responses.unable_to_load", { item: "update" }, userData.locale || "rw")}`;
+    }
+  },
 };
 
 /**
@@ -249,6 +294,8 @@ export const handleUSSDRequest = async (text, userData) => {
     if (menu.acceptsInput) {
       session.formData = session.formData || {};
       session.formData[currentMenu] = choice;
+      // Track which menu captured the last input
+      session.lastInputKey = currentMenu;
       sessionManager.setSession(userData.sessionId, session);
     }
 

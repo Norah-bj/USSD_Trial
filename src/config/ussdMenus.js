@@ -146,14 +146,11 @@ export const getUssdMenus = (locale = "en") => {
     },
 
     updateInsurance: {
-      text: `CON ${t("update_info.update_insurance", {}, locale)}
-    1. ${t("common.confirm", {}, locale)}
-    2. ${t("common.cancel", {}, locale)}
-    `,
+      text: `CON ${t("update_info.update_insurance", {}, locale)}`,
       options: {
-        1: "updateSuccess",
-        2: "main",
+        "*": "updateSuccess",
       },
+      acceptsInput: true,
     },
 
     updateId: {
