@@ -10,7 +10,7 @@ class SessionManager {
     return this.sessions.get(sessionId);
   }
 
-  // Set session data
+  // Set or update session data
   setSession(sessionId, data) {
     this.sessions.set(sessionId, {
       ...this.getSession(sessionId),
@@ -31,26 +31,26 @@ class SessionManager {
     return session?.language || "en";
   }
 
-  // Clear session
+  // Clear session completely
   clearSession(sessionId) {
     this.sessions.delete(sessionId);
   }
 
-  // Clean up old sessions (older than 30 minutes)
+  // 🧹 Clean up old sessions (older than 1 hour)
   cleanupSessions() {
-    const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000); // 1 hour
     for (const [sessionId, session] of this.sessions.entries()) {
-      if (session.lastActivity < thirtyMinutesAgo) {
+      if (session.lastActivity < oneHourAgo) {
         this.sessions.delete(sessionId);
       }
     }
   }
 }
 
-// Create singleton instance
+// ✅ Create singleton instance
 export const sessionManager = new SessionManager();
 
-// Run cleanup every 10 minutes
+// 🕓 Run cleanup every 15 minutes
 setInterval(() => {
   sessionManager.cleanupSessions();
-}, 10 * 60 * 1000);
+}, 15 * 60 * 1000);
