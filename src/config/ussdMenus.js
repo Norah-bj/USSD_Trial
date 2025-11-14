@@ -186,7 +186,7 @@ export const getUssdMenus = (locale = "en") => {
     askQuestion: {
       text: `CON ${t("ai_assistance.custom_prompt", {}, locale)}`,
       options: {
-        "*": "aiResponse",
+        "*": "getAIGuidance",
       },
       acceptsInput: true,
     },

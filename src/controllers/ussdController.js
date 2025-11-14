@@ -14,7 +14,7 @@ import {
   triggerDistressAlert,
   // getPosts,
 } from "../services/backendApiService.js";
-import { getEmergencyGuidance } from "../services/aiService.js";
+import { getMotherlinkGuidance } from "../services/aiService.js";
 
 /**
  * Language handlers - set language and redirect to main menu
@@ -240,17 +240,22 @@ export const terminalHandlers = {
 
   getAIGuidance: async (userData) => {
     try {
-      const locale = userData.locale || "en";
-      const result = await getEmergencyGuidance(null, null, locale);
+      const session = sessionManager.getSession(userData.sessionId);
+      const locale = userData.locale || "rw";
+      const lastKey = session?.lastInputKey;
+      const question = (session?.formData && lastKey ? session.formData[lastKey] : "") || "";
 
-      if (result.success) {
-        return `END ${t("ai_assistance.guidance_title", {}, locale)}\n\n${result.guidance}\n\nItegure kandi ube amahoro.`;
-      } else {
-        return `END ${t("ai_assistance.guidance_title", {}, locale)}\n\nNtibyakunze kubona inama za AI.`;
+      console.log("QUESTION RECEIVED:", question);
+      console.log("SESSION SNAPSHOT:", { lastKey, formDataKeys: Object.keys(session?.formData || {}) });
+
+      const result = await getMotherlinkGuidance(null, question, locale);
+      if (result?.success && result.guidance) {
+        return `END ${result.guidance}`;
       }
+      return `END ${t("responses.unable_to_load", { item: "AI guidance" }, locale)}`;
     } catch (error) {
       console.error("Error getting AI guidance:", error);
-      return `END ${t("responses.unable_to_load", { item: "AI guidance" }, "en")}`;
+      return `END ${t("responses.unable_to_load", { item: "AI guidance" }, userData.locale || "rw")}`;
     }
   },
 };

@@ -41,12 +41,12 @@ export const getMotherlinkGuidance = async (
     const systemPrompt = `${systemInstructions}\nMake responses short, friendly, and easy to understand for USSD users.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // You can upgrade to gpt-4-turbo or gpt-4o-mini
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.7,
+      temperature: 0.5,
     });
 
     const aiText = completion.choices[0].message.content;
@@ -110,8 +110,8 @@ const formatForUSSD = (text) => {
   let formatted = text.replace(/[*_#]/g, "");
   formatted = formatted.replace(/\s+/g, " ").trim();
 
-  if (formatted.length > 600) {
-    formatted = formatted.substring(0, 597) + "...";
+  if (formatted.length > 480) {
+    formatted = formatted.substring(0, 477) + "...";
   }
 
   return formatted;
@@ -162,7 +162,7 @@ const getDefaultGuidance = (topic, locale) => {
 export const getEmergencyGuidance = async (prompt) => {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // or "gpt-4o-mini" if available
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -171,7 +171,7 @@ export const getEmergencyGuidance = async (prompt) => {
         },
         { role: "user", content: prompt },
       ],
-      temperature: 0.7,
+      temperature: 0.5,
     });
 
     const aiText = response.choices[0].message.content.trim();
