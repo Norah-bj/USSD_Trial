@@ -237,6 +237,7 @@ export const terminalHandlers = {
 
   // ----------------------
   // 🟢 Get AI guidance
+  // ----------------------
 
   getAIGuidance: async (userData) => {
     try {
