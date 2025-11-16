@@ -1,136 +1,219 @@
-# INKINGI Rescue - USSD & SMS Backend Server
+MotherLink – USSD-Powered Maternal & Child Health Support System
 
-A modular USSD application for emergency rescue services in Rwanda, built with Express.js and Africa's Talking API.
+MotherLink is a USSD-first digital health platform designed to support pregnant mothers and caregivers of children under five in Rwanda. It connects communities, CHWs (Community Health Workers), and hospitals through a simple, reliable, and accessible system that works on any phone — even without internet.
 
-## Features
+MotherLink improves access to health information, emergency response, and care coordination, especially in rural or underserved areas.
 
-- **Multi-language Support**: English, Kinyarwanda, French, and Kiswahili
-- **Emergency Reporting**: Report various types of emergencies (Fire, Medical, Assault, etc.)
-- **Distress Alert**: Quick SOS button for immediate emergencies
-- **Community Posts**: Access news and events
-- **Hotlines**: Quick access to emergency contact numbers
-- **Session Management**: Maintains user context throughout the USSD session
+🌍 Core Features
+1. USSD Platform (Primary Interface)
 
-## Installation
+Accessible via a short code, the USSD menu offers:
 
-1. Clone the repository:
+Maternal health education
 
-```bash
-git clone https://github.com/ndizeyedavid/INKINGI-Rescue-AT-Server
-cd INKINGI-Rescue-AT-server
-```
+Child under-5 health guidance
 
-2. Install dependencies:
+Emergency request system
 
-```bash
+Health reminders & follow-ups
+
+CHW communication channel
+
+Multi-language support (Kinyarwanda, English, French, Kiswahili)
+
+2. CHW Dashboard
+
+A lightweight web dashboard for community health workers:
+
+View and manage emergency alerts from mothers
+
+Track pregnant mothers & under-5 children in their village
+
+Update follow-up records
+
+Coordinate transport or call an ambulance
+
+Monitor risk cases and escalate serious emergencies
+
+3. Hospital Dashboard
+
+Built for health centers and district hospitals:
+
+Receive emergency notifications from CHWs
+
+View maternal/child profiles
+
+Track ambulance requests
+
+Coordinate care with CHWs
+
+Update appointment and referral data
+
+4. Emergency Workflow
+
+MotherLink fixes the biggest gap: ambulance hotline inefficiency.
+
+When a mother sends an emergency alert:
+
+USSD triggers the CHW instantly
+
+CHW checks the case and responds
+
+CHW can call ambulance crew or alternative transport
+
+Hospital receives a log of the emergency
+
+This removes:
+
+Delays from busy hotline numbers
+
+Confusion in locating the caller
+
+Mothers being unable to explain the situation
+
+5. Future Upgrade: GPS Ambulance Tracking
+
+We will integrate:
+
+GPS-based ambulance tracking
+
+Real-time location sharing with CHWs + hospitals
+
+ETA estimation for emergencies
+
+Map dashboard for hospitals
+
+This directly solves the “ambulance hotline sometimes doesn’t work” issue.
+
+🧩 Technology Stack
+Backend
+
+Node.js (Express)
+
+Neon Postgres (Serverless & scalable)
+
+Africa’s Talking USSD API
+
+Frontend
+
+React.js
+
+Tailwind CSS
+
+Other
+
+Session management for USSD
+
+Roles: Mother, CHW, Hospital Admin
+
+Secure data handling
+
+🚀 Installation (Developer Guide)
+1. Clone
+git clone https://github.com/your-org/motherlink
+cd motherlink
+
+2. Install dependencies
 npm install
-```
 
-3. Create a `.env.local` file:
+3. Environment Variables
 
-```env
+Create .env:
+
 PORT=8080
+DATABASE_URL=your_neon_postgres_connection_string
 AT_API_KEY=your_africas_talking_api_key
-AT_USERNAME=your_africas_talking_username
-GEMINI_API_KEY=your_gemini_api_key
-```
+AT_USERNAME=your_at_username
 
-4. Start the server:
+4. Start Server
+npm run dev
 
-```bash
-npm start       # Production with nodemon
-npm run dev     # Development mode
-```
-
-## Development
-
-### Adding New Menu Items
-
-1. **Add menu to `src/config/ussdMenus.js`**:
-
-```javascript
-export const ussdMenus = {
-  // ... existing menus
-  newMenu: {
-    text: `CON Your menu text
-    1. Option 1
-    2. Option 2
-    0. Go back`,
-    options: {
-      1: "nextStep1",
-      2: "nextStep2",
-      0: "previousMenu",
-    },
-  },
-};
-```
-
-2. **Add handler in `src/controllers/ussdController.js`** (if terminal action):
-
-```javascript
-export const terminalHandlers = {
-  // ... existing handlers
-  newHandler: (userData) => {
-    // Your logic here
-    return `END Response message`;
-  },
-};
-```
-
-### Adding Middleware
-
-Create a new file in `src/middlewares/` and import it in `server.js`:
-
-```javascript
-import { yourMiddleware } from "./middlewares/yourMiddleware.js";
-app.use(yourMiddleware);
-```
-
-### Session Management
-
-Access session data using the `sessionManager`:
-
-```javascript
-import { sessionManager } from "../utils/sessionManager.js";
-
-// Get session
-const session = sessionManager.getSession(sessionId);
-
-// Set session data
-sessionManager.setSession(sessionId, { key: "value" });
-
-// Get/Set language
-const lang = sessionManager.getLanguage(sessionId);
-sessionManager.setLanguage(sessionId, "en");
-```
-
-## Testing USSD Locally
-
-1. Use Africa's Talking Simulator: https://simulator.africastalking.com/
-2. Or use ngrok to expose your local server:
-
-```bash
-npm run ngrok
-```
-
-## API Endpoints
-
-- `GET /` - Health check endpoint
-- `POST /ussd` - Main USSD endpoint (receives Africa's Talking callbacks)
-
-## USSD Request Format
-
-Africa's Talking sends POST requests with:
-
-```json
+🔄 USSD Flow Structure
 {
-  "sessionId": "unique_session_id",
+  "sessionId": "uuid",
+  "phoneNumber": "+25078XXXXXXX",
   "serviceCode": "*123#",
-  "phoneNumber": "+250788123456",
-  "text": "1*2*3"
+  "text": "1*2"
 }
-```
 
-## Implementation Plan
 
-![IMG_0382](https://github.com/user-attachments/assets/cab105da-3161-48b5-9f94-f7a641897e10)
+Routes:
+
+POST /ussd – main USSD handler
+
+GET / – health check
+
+🏥 Use Cases
+For Mothers
+
+Easy-to-understand instructions for pregnancy & child health
+
+Fast emergency support
+
+No smartphone or internet needed
+
+For CHWs
+
+Faster response to emergencies
+
+Simplified follow-up tracking
+
+Real-time communication
+
+For Hospitals
+
+Organized patient flow
+
+Better ambulance coordination
+
+Digital records of emergencies
+
+📊 SDG Alignment
+SDG	Why MotherLink fits
+SDG 3 – Good Health & Well-Being	Reduces maternal & child mortality.
+SDG 1 – No Poverty	Prevents financial shocks by offering timely care and reducing emergency costs.
+SDG 5 – Gender Equality	Supports women’s health access.
+SDG 9 – Industry, Innovation & Infrastructure	USSD + GPS health infrastructure.
+SDG 10 – Reduced Inequalities	Reaches rural populations with no smartphones.
+🆚 Competitors (Rwanda)
+
+RBC 114 Ambulance Hotline
+
+Weakness: delay, sometimes unreachable, no tracking.
+
+Babyl Rwanda
+
+Focuses on consultation, not emergencies or CHWs.
+
+Winnie's App / MOMConnect-like tools
+
+Smartphone-based → excludes rural moms.
+
+General CHW manual system
+
+Slow, no digital coordination.
+
+MotherLink is unique because it connects mothers → CHWs → hospitals → ambulance in one pipeline.
+
+💡 Why NGOs Should Care
+
+Direct impact on maternal & under-5 mortality
+
+Solves emergency delays in rural areas
+
+Works on the cheapest phones; inclusive by design
+
+Scalable statewide
+
+Clear data for public health planning
+
+Supports CHWs — the backbone of Rwanda’s health system
+
+📞 Contact
+
+If you'd like to collaborate, contribute, or deploy MotherLink in your district:
+
+Team MotherLink
+📧 inezanorah12@gmail.com
+ (example)
+🌍 Rwanda
