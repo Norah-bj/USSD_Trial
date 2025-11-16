@@ -11,6 +11,45 @@ MotherLink includes:
 
 ---
 
+🗺️ Future Roadmap
+Real-time ambulance GPS
+
+Offline CHW support
+
+Voice-based system for mothers who can't read
+
+Machine-learning danger sign predictions
+
+National coverage rollout
+
+🤝 Partnerships 
+MotherLink plans to partner with:
+
+Ministry of Health (MoH)
+
+Rwanda Biomedical Center (RBC)
+
+UNICEF
+
+WHO
+
+UNFPA
+
+Imbuto Foundation
+
+NGOs supporting maternal & child health
+
+We for Health
+
+👥 Team
+CEO – Strategy & Partnerships
+
+COO and CTO – Operations & Field Coordination and Chief Technology Officer
+
+CMO – Market Outreach & Data Insights
+
+Finance Lead – Budgeting, sustainability & investment model
+
 ## 🚀 Features
 
 ### 📱 USSD Application (Mother Interface)
@@ -180,45 +219,5 @@ src/
  ├── routers/
  ├── services/
  ├── utils/
-#  ├── dashboards/
-#  │     ├── chw-dashboard/
-#  │     └── hospital-dashboard/
  └── server.js
-🗺️ Future Roadmap
-Real-time ambulance GPS
 
-Offline CHW support
-
-Voice-based system for mothers who can't read
-
-Machine-learning danger sign predictions
-
-National coverage rollout
-
-🤝 Partnerships 
-MotherLink plans to partner with:
-
-Ministry of Health (MoH)
-
-Rwanda Biomedical Center (RBC)
-
-UNICEF
-
-WHO
-
-UNFPA
-
-Imbuto Foundation
-
-NGOs supporting maternal & child health
-
-We for Health
-
-👥 Team
-CEO – Strategy & Partnerships
-
-COO and CTO – Operations & Field Coordination and Chief Technology Officer
-
-CMO – Market Outreach & Data Insights
-
-Finance Lead – Budgeting, sustainability & investment model
