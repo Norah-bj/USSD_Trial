@@ -1,219 +1,224 @@
-MotherLink – USSD-Powered Maternal & Child Health Support System
+# MotherLink – USSD-Based Maternal & Child Health Support System
 
-MotherLink is a USSD-first digital health platform designed to support pregnant mothers and caregivers of children under five in Rwanda. It connects communities, CHWs (Community Health Workers), and hospitals through a simple, reliable, and accessible system that works on any phone — even without internet.
+MotherLink is a digital health platform designed to support **pregnant women and mothers with children under five** in Rwanda.  
+It works on **basic phones through USSD**, allowing access to life-saving information, CHW assistance, and emergency help — even without internet.
 
-MotherLink improves access to health information, emergency response, and care coordination, especially in rural or underserved areas.
+MotherLink includes:
+- A **USSD application** for mothers
+- A **CHW dashboard**
+- A **Hospital dashboard**
+- A **future ambulance GPS tracking system** (planned)
 
-🌍 Core Features
-1. USSD Platform (Primary Interface)
+---
 
-Accessible via a short code, the USSD menu offers:
+## 🚀 Features
 
-Maternal health education
+### 📱 USSD Application (Mother Interface)
+Accessible on any phone using a simple dial code (e.g. *123*4#).
 
-Child under-5 health guidance
+- **Registration & Profile Update**
+- **Maternal Health Information**
+  - Pregnancy tips  
+  - Child growth information  
+  - Danger-sign education  
+- **Emergency Distress Button**
+  - Alerts nearest CHW  
+  - CHW escalates to ambulance/hospital  
+- **Ask a Health Question**
+  - Questions routed to CHW dashboard
+- **AI Support**
+  - Simple Q&A for health information (non-emergency)
+- **Appointment Tracking**
+  - Mothers can view upcoming ANC/postnatal appointments
 
-Emergency request system
+---
 
-Health reminders & follow-ups
+## 👩‍⚕️ CHW Dashboard (Community Health Workers)
 
-CHW communication channel
+Powered by a web app:
 
-Multi-language support (Kinyarwanda, English, French, Kiswahili)
+- View registered mothers in their village  
+- Receive distress alerts instantly  
+- Respond and record actions taken  
+- View and reply to questions from mothers  
+- Monitor appointment schedules  
+- Track health progress and danger signs  
 
-2. CHW Dashboard
+---
 
-A lightweight web dashboard for community health workers:
+## 🏥 Hospital Dashboard
 
-View and manage emergency alerts from mothers
+For health centers and district hospitals:
 
-Track pregnant mothers & under-5 children in their village
+- Receive CHW-forwarded emergencies  
+- Assign ambulances or alternative transport  
+- View patient profiles and medical info  
+- Track service usage  
+- Generate reports for monitoring and evaluation  
 
-Update follow-up records
+---
 
-Coordinate transport or call an ambulance
+## 🧭 Future Feature: Ambulance GPS Tracking
 
-Monitor risk cases and escalate serious emergencies
+In the next version, MotherLink will introduce:
 
-3. Hospital Dashboard
+- **Real-time ambulance location**
+- **Estimated arrival time for CHWs & hospitals**
+- **Faster routing based on nearest available ambulance**
+- **History of ambulance trips and response time data**
 
-Built for health centers and district hospitals:
+---
 
-Receive emergency notifications from CHWs
+## 🌍 Impact Areas (SDGs)
 
-View maternal/child profiles
+MotherLink contributes to:
 
-Track ambulance requests
+- **SDG 1 – No Poverty**  
+- **SDG 3 – Good Health & Well-Being**  
+- **SDG 5 – Gender Equality**  
+- **SDG 9 – Industry, Innovation & Infrastructure**  
+- **SDG 10 – Reduced Inequalities**
 
-Coordinate care with CHWs
+---
 
-Update appointment and referral data
+## 🏗️ System Architecture
 
-4. Emergency Workflow
+USSD Phone
+↓
+Africa's Talking API
+↓
+Node.js (Express Server)
+↓ ↓
+Postgres DB CHW Dashboard (React)
+↓
+Hospital Dashboard
 
-MotherLink fixes the biggest gap: ambulance hotline inefficiency.
+yaml
+Copy code
 
-When a mother sends an emergency alert:
 
-USSD triggers the CHW instantly
+---
 
-CHW checks the case and responds
+## 🛠️ Tech Stack
 
-CHW can call ambulance crew or alternative transport
+### Backend
+- Node.js (Express.js)
+- Africa’s Talking API (USSD)
+- Neon PostgreSQL
 
-Hospital receives a log of the emergency
+### Frontend
+- React.js  
+- Tailwind CSS  
 
-This removes:
+### Other Integrations
+- SMS alerts (via AT)  
+- Future GPS tracking  
+- AI for assistance and answering question about health tips
 
-Delays from busy hotline numbers
+---
 
-Confusion in locating the caller
+## 📦 Installation
 
-Mothers being unable to explain the situation
+### 1. Clone the repository
 
-5. Future Upgrade: GPS Ambulance Tracking
-
-We will integrate:
-
-GPS-based ambulance tracking
-
-Real-time location sharing with CHWs + hospitals
-
-ETA estimation for emergencies
-
-Map dashboard for hospitals
-
-This directly solves the “ambulance hotline sometimes doesn’t work” issue.
-
-🧩 Technology Stack
-Backend
-
-Node.js (Express)
-
-Neon Postgres (Serverless & scalable)
-
-Africa’s Talking USSD API
-
-Frontend
-
-React.js
-
-Tailwind CSS
-
-Other
-
-Session management for USSD
-
-Roles: Mother, CHW, Hospital Admin
-
-Secure data handling
-
-🚀 Installation (Developer Guide)
-1. Clone
-git clone https://github.com/your-org/motherlink
+```bash
+git clone https://github.com/yourname/motherlink
 cd motherlink
-
 2. Install dependencies
+bash
+Copy code
+
 npm install
-
 3. Environment Variables
-
 Create .env:
 
+env
+Copy code
+
 PORT=8080
-DATABASE_URL=your_neon_postgres_connection_string
-AT_API_KEY=your_africas_talking_api_key
-AT_USERNAME=your_at_username
+AT_API_KEY=your_key
+AT_USERNAME=your_username
+DATABASE_URL=postgresql://your_neon_connection_string
+4. Start the server
+bash
+Copy code
 
-4. Start Server
 npm run dev
+🧩 USSD Menu Structure (Example)
+markdown
+Copy code
 
-🔄 USSD Flow Structure
-{
-  "sessionId": "uuid",
-  "phoneNumber": "+25078XXXXXXX",
-  "serviceCode": "*123#",
-  "text": "1*2"
-}
+1. Registration
+2. Update Information
+3. Ask a Question
+4. Emergency Distress
+5. AI Assistance
+6. Settings
+7. Appointment Service
+🧪 Testing USSD
+Use Africa’s Talking simulator:
 
+https://simulator.africastalking.com/
 
-Routes:
+Or expose your server:
 
-POST /ussd – main USSD handler
+bash
+Copy code
 
-GET / – health check
+npm run ngrok
+🧵 Folder Structure
+pgsql
+Copy code
 
-🏥 Use Cases
-For Mothers
+src/
+ ├── config/
+ │     └── ussdMenus.js
+ ├── controllers/
+ │     └── ussdController.js
+ ├── locales/
+ ├── middlewares/
+ ├── routers/
+ ├── services/
+ ├── utils/
+#  ├── dashboards/
+#  │     ├── chw-dashboard/
+#  │     └── hospital-dashboard/
+ └── server.js
+🗺️ Future Roadmap
+Real-time ambulance GPS
 
-Easy-to-understand instructions for pregnancy & child health
+Offline CHW support
 
-Fast emergency support
+Voice-based system for mothers who can't read
 
-No smartphone or internet needed
+Machine-learning danger sign predictions
 
-For CHWs
+National coverage rollout
 
-Faster response to emergencies
+🤝 Partnerships 
+MotherLink plans to partner with:
 
-Simplified follow-up tracking
+Ministry of Health (MoH)
 
-Real-time communication
+Rwanda Biomedical Center (RBC)
 
-For Hospitals
+UNICEF
 
-Organized patient flow
+WHO
 
-Better ambulance coordination
+UNFPA
 
-Digital records of emergencies
+Imbuto Foundation
 
-📊 SDG Alignment
-SDG	Why MotherLink fits
-SDG 3 – Good Health & Well-Being	Reduces maternal & child mortality.
-SDG 1 – No Poverty	Prevents financial shocks by offering timely care and reducing emergency costs.
-SDG 5 – Gender Equality	Supports women’s health access.
-SDG 9 – Industry, Innovation & Infrastructure	USSD + GPS health infrastructure.
-SDG 10 – Reduced Inequalities	Reaches rural populations with no smartphones.
-🆚 Competitors (Rwanda)
+NGOs supporting maternal & child health
 
-RBC 114 Ambulance Hotline
+We for Health
 
-Weakness: delay, sometimes unreachable, no tracking.
+👥 Team
+CEO – Strategy & Partnerships
 
-Babyl Rwanda
+COO and CTO – Operations & Field Coordination and Chief Technology Officer
 
-Focuses on consultation, not emergencies or CHWs.
+CMO – Market Outreach & Data Insights
 
-Winnie's App / MOMConnect-like tools
-
-Smartphone-based → excludes rural moms.
-
-General CHW manual system
-
-Slow, no digital coordination.
-
-MotherLink is unique because it connects mothers → CHWs → hospitals → ambulance in one pipeline.
-
-💡 Why NGOs Should Care
-
-Direct impact on maternal & under-5 mortality
-
-Solves emergency delays in rural areas
-
-Works on the cheapest phones; inclusive by design
-
-Scalable statewide
-
-Clear data for public health planning
-
-Supports CHWs — the backbone of Rwanda’s health system
-
-📞 Contact
-
-If you'd like to collaborate, contribute, or deploy MotherLink in your district:
-
-Team MotherLink
-📧 inezanorah12@gmail.com
- (example)
-🌍 Rwanda
+Finance Lead – Budgeting, sustainability & investment model
