@@ -7,7 +7,7 @@ dotenv.config({ path: ".env.local" });
 const credentials = {
   apiKey:
     process.env.AT_API_KEY ||
-    "atsk_1e914afd3d722669596ab1869ac37145e9704c1cead8475e8096fa89cd110455f814dfa2",
+    // "atsk_1e914afd3d722669596ab1869ac37145e9704c1cead8475e8096fa89cd110455f814dfa2",
   username: process.env.AT_USERNAME || "sandbox",
 };
 
